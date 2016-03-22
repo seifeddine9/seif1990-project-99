@@ -485,7 +485,7 @@ tondre,des fleurs  <br/>à planter, greffer … ? </h3>
 
                     <span class="input-group col-lg-5  col-md-5  col-sm-5  col-xs-12">
                         <i class="fa fa-user"></i>
-                        <input type="text" name="contactName" id="contactName"  class="required " placeholder="Nom et Prénom"  maxlength="250" autofocus />
+                        <input type="text" name="contactName" id="contactName"  class="required " placeholder="Nom et Prénom"  maxlength="250"  />
                     </span><!-- .input-group -->
                      <span class="input-group col-lg-1  col-md-21  col-sm-1  col-xs-0"></span>
                     <span class="input-group col-lg-5  col-md-5  col-sm-5  col-xs-12">

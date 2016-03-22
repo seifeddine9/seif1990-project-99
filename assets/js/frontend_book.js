@@ -195,7 +195,7 @@ var FrontendBook = {
          *when click on appointment-row display the appointment info
          */
 
-        $("tr").click(function () { // Click to only happen on announce links
+       $(document).on('click', 'tr',function() { // Click to only happen on announce links
 
 
             var appointmentId = $(this).attr('data-id');
@@ -209,22 +209,58 @@ var FrontendBook = {
                 }
 
             });
+
+              var start = GeneralFunctions.formatDate(Date.parse(appointmentInfo.start_datetime), GlobalVariables.dateFormat, true);
+            //dateStart
+            var heureStart = start.substr(11);
+            var startDate = moment(start, 'DD/MM/YYYY').format("DD MMM YYYY");
+
             $('#waiting-appointment').attr('data-id', appointmentId);
             $('#waiting-confirm').attr('data-id', appointmentInfo.hash);
             console.log('appointment hash: ', appointmentInfo.hash);
             if ($('#provider-form').css("display") != "none")
             {
-                $('#general-info').html('<div >' +
-                        '<span class="Service col-md-3">Prestations </span><span class="Service col-md-6">' + appointmentInfo.service.name + '</span><br>' +
-                        '<span class="Provider col-md-3">Exécutant</span><span class="Provider col-md-6">' + appointmentInfo.provider.first_name + ' ' + appointmentInfo.provider.last_name + '</span><br>' +
-                        '<span class="Date col-md-3">Date</span><span class="Date col-md-6">' + appointmentInfo.start_datetime + '</span><br>' +
-                        '<span class="Prix col-md-3">Prix</span><span class="Prix col-md-6">' + appointmentInfo.service.price + ' ' + appointmentInfo.service.currency + '</span><br/></div>');
-            } else {
-                $('#general-info').html('<div >' +
-                        '<span class="Service col-md-3">Prestations </span><span class="Service col-md-6">' + appointmentInfo.service.name + '</span><br>' +
+                $('#general-info').html('<div  class="col-sm-6 col-md-6 col-xs-12">' +
+                       '<h4> &nbsp;&nbsp;<i class="fa fa-star"></i>&nbsp;' + appointmentInfo.service.name + '</h4>' +
+                         '<p><strong class="text-primary">' +
+                     '<h4><i class="fa fa-user"></i> ' + appointmentInfo.provider.first_name + ' ' + appointmentInfo.provider.last_name + '</h4>' +
+               
+                     '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-calendar""></i> '+startDate + '&nbsp;&nbsp;-&nbsp;<i class="fa fa-clock-o" ></i> ' + heureStart +''+
+                     '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><i class="fa fa-credit-card" ></i> ' + appointmentInfo.service.price + ' ' + appointmentInfo.service.currency + '<br/></strong></p></div>'+
+                              '<div  class="col-sm-6 col-md-6 col-xs-12">' +      
+                          '<h4><i class="fa fa-user"></i> ' + GlobalVariables.customerData.first_name + ' ' + GlobalVariables.customerData.last_name + '</h4>' +
+                            '<p><strong class="text-primary">' +
+                         
+                           '&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-envelope-o" ></i> ' + GlobalVariables.customerData.email +
+                          '<br/>' +
+                          '&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-phone" ></i>  ' + GlobalVariables.customerData.phone_number +
+                          '<br/>' +
+                          '</strong></p>'+
+
+
+                        '</div>' );
+                           } else {
+                $('#general-info').html('<div  class="col-sm-6 col-md-6 col-xs-12">' +
+                       '<h4> &nbsp;&nbsp;<i class="fa fa-star"></i>&nbsp;' + appointmentInfo.service.name + '</h4>' +
+                         '<p><strong class="text-primary">' +
+
                         //'<span class="Provider col-md-3">Exécutant</span><span class="Provider col-md-6">' + appointmentInfo.provider.first_name + ' ' + appointmentInfo.provider.last_name + '</span><br>' +
-                        '<span class="Date col-md-3">Date</span><span class="Date col-md-6">' + appointmentInfo.start_datetime + '</span><br>' +
-                        '<span class="Prix col-md-3">Prix</span><span class="Prix col-md-6">' + appointmentInfo.service.price + ' ' + appointmentInfo.service.currency + '</span><br/></div>');
+               
+                     '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-calendar""></i> '+startDate + '&nbsp;&nbsp;-&nbsp;<i class="fa fa-clock-o" ></i> ' + heureStart +
+                     '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-credit-card" ></i> ' + appointmentInfo.service.price + ' ' + appointmentInfo.service.currency + '<br/></strong></p></div>'+
+                            
+                           '<div  class="col-sm-6 col-md-6 col-xs-12">' +      
+                          '<h4><i class="fa fa-user"></i> ' + GlobalVariables.customerData.first_name + ' ' + GlobalVariables.customerData.last_name + '</h4>' +
+                            '<p><strong class="text-primary">' +
+                         
+                           '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-envelope-o" ></i> ' + GlobalVariables.customerData.email +
+                          '<br/>' +
+                          '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-phone" ></i>  ' + GlobalVariables.customerData.phone_number +
+                          '<br/>' +
+                          '</strong></p>'+
+
+
+                        '</div>' );
 
             }
 
@@ -416,8 +452,8 @@ var FrontendBook = {
                 title: 'Etes vous sur de vouloir annuler ce rendez-vous?',
                 type: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
+                confirmButtonColor: '#23b08a',
+                cancelButtonColor: '#b02349',
                 confirmButtonText: 'Confirmer!',
                 cancelButtonText: 'Annuler!',
                 confirmButtonClass: 'confirm-class',
@@ -426,7 +462,7 @@ var FrontendBook = {
                     function (isConfirm) {
                         if (isConfirm) {
                             $.post(postUrl, postData, function (response) {
-                                 //console.log('delete response:',response);
+                                // console.log(response);
                                 window.location.reload();
                             });
                         } else {
@@ -541,6 +577,7 @@ var FrontendBook = {
         $('#available-hours').on('click', '.available-hour', function () {
             $('.selected-hour').removeClass('selected-hour');
             $(this).addClass('selected-hour');
+              $('.hours').text($('.selected-hour').text());
             FrontendBook.updateConfirmFrame();
         });
         if (FrontendBook.manageMode) {
@@ -624,26 +661,32 @@ var FrontendBook = {
             'appointment_id': appointmentId
         };
         $.post(postUrl, postData, function (response) {
-            ///////////////////////////////////////////////////////////////
+                      ///////////////////////////////////////////////////////////////
             console.log('Get Available Hours JSON Response:', response);
             ///////////////////////////////////////////////////////////////
 
             if (!GeneralFunctions.handleAjaxExceptions(response))
                 return;
+
             // The response contains the available hours for the selected provider and
             // service. Fill the available hours div with response data.
             if (response.length > 0) {
                 var currColumn = 1;
-                $('#available-hours').html('<div style="width:50px; float:left;"></div>');
+                 $('.ask-dispo').html('<br/>Si vous ne trouvez pas une date qui vous convient vous pouvez envoyer une demande au administrateur');
+                $('#available-hours').html('<li style="width:50px; float:left;"></li>');
+                                    $('.hours').text('Choisir l\'Heure ');
+
                 $.each(response, function (index, availableHour) {
                     if ((currColumn * 10) < (index + 1)) {
                         currColumn++;
-                        $('#available-hours').append('<div style="width:50px; float:left;"></div>');
+                        $('#available-hours').append('<li style="width:50px; float:left;"></li>');
+
                     }
 
-                    $('#available-hours div:eq(' + (currColumn - 1) + ')').append(
-                            '<span class="available-hour">' + availableHour + '</span><br/>');
+                    $('#available-hours li:eq(' + (currColumn - 1) + ')').append(
+                            '<span class="available-hour">' + availableHour + '</span>');
                 });
+
                 if (FrontendBook.manageMode) {
                     // Set the appointment's start time as the default selection.
                     $('.available-hour').removeClass('selected-hour');
@@ -655,17 +698,18 @@ var FrontendBook = {
                 } else {
                     // Set the first available hour as the default selection.
                     $('.available-hour:eq(0)').addClass('selected-hour');
+
                 }
 
                 FrontendBook.updateConfirmFrame();
+
             } else {
-                $('#available-hours').html(EALang['no_available_hours']);
+              $('.ask-dispo').html(EALang['no_available_hours']+'\n\n'+ EALang['ask_for_dispo']);
+                      $('.hours').text('non disponible');
+
+
             }
-
-            //$('#waiting-content').html($('#select-service').val());
-
-
-        }, 'json').fail(GeneralFunctions.ajaxFailureHandler);
+         }, 'json').fail(GeneralFunctions.ajaxFailureHandler);
     },
     /**
      * This function validates the customer's data input. The user cannot contiue
@@ -738,18 +782,20 @@ var FrontendBook = {
         var servicePrice, serviceCurrency;
         $.each(GlobalVariables.availableServices, function (index, service) {
             if (service.id == selServiceId) {
-                servicePrice = '<br>' + service.price;
+                servicePrice = '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-credit-card" ></i> ' + service.price;
                 serviceCurrency = service.currency;
+                                servicename = service.name;
+
                 return false; // break loop
             }
         });
-        var html =
-                '<h4>' + $('#select-service option:selected').text() + '</h4>' +
+             var html =
+                '<h4> &nbsp;&nbsp;<i class="fa fa-star"></i>&nbsp; ' + servicename + '</h4>' +
                 '<p>'
                 + '<strong class="text-primary">'
-                + $('#select-provider option:selected').text() + '<br>'
-                + selectedDate + ' ' + $('.selected-hour').text()
-                + servicePrice + ' ' + serviceCurrency
+                + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i class="fa fa-user"></i> '+$('#select-provider option:selected').text() + '<br>'
+                + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i class="fa fa-calendar""></i> '+selectedDate + '&nbsp;&nbsp;-&nbsp;<i class="fa fa-clock-o" ></i> ' + $('.selected-hour').text()
+                +servicePrice + '' + serviceCurrency
                 + '</strong>' +
                 '</p>';
         $('#appointment-details').html(html);
@@ -762,19 +808,16 @@ var FrontendBook = {
                 address = GlobalVariables.customerData.address,
                 city = GlobalVariables.customerData.city,
                 zipCode = GlobalVariables.customerData.zip_code,
-                html =
-                '<h4>' + firstname + ' ' + lastname + '</h4>' +
-                '<p>' +
-                EALang['phone'] + ': ' + phoneNumber +
+        html =
+                '<h4><i class="fa fa-user"></i> ' + firstname + ' ' + lastname + '</h4>' +
+                '<p><strong class="text-primary">' +
+                '&nbsp;&nbsp;<i class="fa fa-home" ></i>&nbsp;' + address +' <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+ zipCode +' '+ city+
+                '<br/>' + 
+                 '&nbsp;&nbsp;<i class="fa fa-envelope-o" ></i> ' + email +
                 '<br/>' +
-                EALang['email'] + ': ' + email +
+                '&nbsp;&nbsp;<i class="fa fa-phone" ></i>  ' + phoneNumber +
                 '<br/>' +
-                EALang['address'] + ': ' + address +
-                '<br/>' +
-                EALang['city'] + ': ' + city +
-                '<br/>' +
-                EALang['zip_code'] + ': ' + zipCode +
-                '</p>';
+                '</strong></p>';
         $('#customer-details').html(html);
         // Update appointment form data for submission to server when the user confirms
         // the appointment.

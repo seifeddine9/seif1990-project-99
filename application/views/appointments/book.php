@@ -55,7 +55,7 @@
         src="<?php echo $this->config->item('base_url'); ?>/assets/ext/datejs/date.js"></script>
     <script
         type="text/javascript"
-        src="<?php echo $this->config->item('base_url'); ?>/assets/js/frontend_book.js"></script>
+        src="<?php echo $this->config->item('base_url'); ?>/assets/js/frontend_book_link.js"></script>
 
     <?php
         // ------------------------------------------------------------
@@ -83,6 +83,8 @@
             appointmentData     : <?php echo json_encode($appointment_data); ?>,
             providerData        : <?php echo json_encode($provider_data); ?>,
             customerData        : <?php echo json_encode($customer_data); ?>,
+            user_id        : <?php echo '"' . $user_id . '"'; ?>,
+
             csrfToken           : <?php echo json_encode($this->security->get_csrf_hash()); ?>
         };
 
@@ -90,7 +92,7 @@
         var availableLanguages = <?php echo json_encode($this->config->item('available_languages')); ?>;
 
         $(document).ready(function() {
-            FrontendBook.initialize(true, GlobalVariables.manageMode);
+            FrontendBookLink.initialize(true, GlobalVariables.manageMode);
             // GeneralFunctions.centerElementOnPage($('#book-appointment-wizard'));
             GeneralFunctions.enableLanguageSelection($('#select-language'));
         });
@@ -145,7 +147,7 @@
                                             . '/index.php/appointments/cancel/' . $appointment_data['hash'] . '">
                                         <input type="hidden" name="csrfToken" value="' . $this->security->get_csrf_hash() . '" />
                                         <textarea name="cancel_reason" style="display:none"></textarea>
-                                        <button id="cancel-appointment" class="btn btn-default">' .
+                                        <button id="cancel-appointment" class="btn btn-primary">' .
                                                 $this->lang->line('cancel') . '</button>
                                     </form>
                                 </div>
@@ -271,19 +273,19 @@
                         <h3 class="frame-title"><?php echo $this->lang->line('step_two_title'); ?></h3>
 
                         <div class="frame-content row">
-                            <div class="col-md-6">
-                                <div id="select-date"></div>
+                            <div class="col-md-6 col-sm-6 col-xs-6 ">
+                                <br/> <div id="select-date"></div>
                             </div>
 
-                            <div class="col-md-6">
-                                <?php // Available hours are going to be fetched via ajax call. ?>
-                                <div id="available-hours"></div>
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <?php // Available hours are going to be fetched via ajax call.   ?>
+                                <br/><div id="available-hours"></div>
                             </div>
                         </div>
                     </div>
 
                     <div class="command-buttons">
-                        <button type="button" id="button-back-2" class="btn button-back btn-default"
+                        <button type="button" id="button-back-2" class="btn button-back btn-primary"
                                 data-step_index="2">
                             <span class="glyphicon glyphicon-backward"></span>
                             <?php echo $this->lang->line('back'); ?>
@@ -301,66 +303,75 @@
                     // ENTER CUSTOMER DATA
                     // ------------------------------------------------------ ?>
 
-                <div id="wizard-frame-3" class="wizard-frame" style="display:none;">
-                    <div class="frame-container">
+ 
+                <?php
+                if (!$user_id) {
+                    ?>
 
-                        <h3 class="frame-title"><?php echo $this->lang->line('step_three_title'); ?></h3>
 
-                        <div class="frame-content row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="first-name" class="control-label"><?php echo $this->lang->line('first_name'); ?> *</label>
-                                    <input type="text" id="first-name" class="required form-control" maxlength="100" />
+
+                    <div id="wizard-frame-3" class="wizard-frame" style="display:none;">
+
+
+
+                        <div class="ibox-content frame-container">
+                                          <div class="alert signup"></div>
+
+
+
+                            <div class="row cnx-choice">
+                                <br/>
+                                <div class="col-sm-6 "><h3 > Connexion</h3>
+                                    <p>Pour continuer,connectez vous à votre espace</p>
+                                    <form role="form">
+                                        <div class="form-group">         
+                                            <i class="fa fa-user overlay"></i>
+                                            <input type="text" placeholder="Email"  id="email-address" class="form-control text-input required">
+                                        </div>
+                                        <div class="form-group">
+                                            <i class="fa fa-key overlay"></i>
+                                            <input type="password" placeholder="Mot de passe" id="password-cnx"  class="form-control text-input required">
+                                        </div>
+
+
+
+
+                                    </form>
                                 </div>
-                                <div class="form-group">
-                                    <label for="last-name" class="control-label"><?php echo $this->lang->line('last_name'); ?> *</label>
-                                    <input type="text" id="last-name" class="required form-control" maxlength="250" />
-                                </div>
-                                <div class="form-group">
-                                    <label for="email" class="control-label"><?php echo $this->lang->line('email'); ?> *</label>
-                                    <input type="text" id="email" class="required form-control" maxlength="250" />
-                                </div>
-                                <div class="form-group">
-                                    <label for="phone-number" class="control-label"><?php echo $this->lang->line('phone_number'); ?> *</label>
-                                    <input type="text" id="phone-number" class="required form-control" maxlength="60" />
-                                </div>
+                         
                             </div>
+                            <div class="alert hidden"></div>
+                        </div>
 
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="address" class="control-label"><?php echo $this->lang->line('address'); ?></label>
-                                    <input type="text" id="address" class="form-control" maxlength="250" />
-                                </div>
-                                <div class="form-group">
-                                    <label for="city" class="control-label"><?php echo $this->lang->line('city'); ?></label>
-                                    <input type="text" id="city" class="form-control" maxlength="120" />
-                                </div>
-                                <div class="form-group">
-                                    <label for="zip-code" class="control-label"><?php echo $this->lang->line('zip_code'); ?></label>
-                                    <input type="text" id="zip-code" class="form-control" maxlength="120" />
-                                </div>
-                                <div class="form-group">
-                                    <label for="notes" class="control-label"><?php echo $this->lang->line('notes'); ?></label>
-                                    <textarea id="notes" maxlength="500" class="form-control" rows="3"></textarea>
-                                </div>
-                            </div>
 
-                            <em id="form-message" class="text-danger"><?php echo $this->lang->line('fields_are_required'); ?></em>
+                        <div class="command-buttons">
+                            <button type="button" id="button-back-3" class="btn button-back btn-primary"
+                                    data-step_index="3"><span class="glyphicon glyphicon-backward"></span>
+                                        <?php echo $this->lang->line('back'); ?>
+                            </button>
+                            <button type="button" id="button-next-3" class="btn button-next btn-primary"
+                                    data-step_index="3">
+                                        <?php echo $this->lang->line('next'); ?>
+                                <span class="glyphicon glyphicon-forward"></span>
+                            </button>
                         </div>
                     </div>
 
-                    <div class="command-buttons">
-                        <button type="button" id="button-back-3" class="btn button-back btn-default"
-                                data-step_index="3"><span class="glyphicon glyphicon-backward"></span>
-                            <?php echo $this->lang->line('back'); ?>
-                        </button>
-                        <button type="button" id="button-next-3" class="btn button-next btn-primary"
-                                data-step_index="3">
-                            <?php echo $this->lang->line('next'); ?>
-                            <span class="glyphicon glyphicon-forward"></span>
-                        </button>
-                    </div>
-                </div>
+
+
+
+
+
+                <?php }
+                ?>
+                <input type="hidden" id ="last-name">
+                <input type="hidden" id ="first-name">
+                <input type="hidden" id ="email">
+                <input type="hidden" id ="phone-number">
+                <input type="hidden" id ="address">
+                <input type="hidden" id ="city">
+                <input type="hidden" id ="zip-code">
+
 
                 <?php
                     // ------------------------------------------------------
@@ -371,8 +382,10 @@
                     <div class="frame-container">
                         <h3 class="frame-title"><?php echo $this->lang->line('step_four_title'); ?></h3>
                         <div class="frame-content row">
-                            <div id="appointment-details" class="col-md-6"></div>
-                            <div id="customer-details" class="col-md-6"></div>
+                                <br/><div class="confirmation-details col-md-12 col-sm-12 col-xs-12">
+                            <div id="appointment-details" class="col-md-6 col-sm-6 col-xs-12"></div>
+                            <div id="customer-details" class="col-md-6 col-sm-6 col-xs-12"></div>
+                        </div>
                         </div>
                         <?php if ($this->settings_model->get_setting('require_captcha') === '1'): ?>
                         <div class="frame-content row">
@@ -390,13 +403,13 @@
                     </div>
 
                     <div class="command-buttons">
-                        <button type="button" id="button-back-4" class="btn button-back btn-default"
+                        <button type="button" id="button-back-4" class="btn button-back btn-primary"
                                 data-step_index="4">
                             <span class="glyphicon glyphicon-backward"></span>
                             <?php echo $this->lang->line('back'); ?>
                         </button>
                         <form id="book-appointment-form" style="display:inline-block" method="post">
-                            <button id="book-appointment-submit" type="button" class="btn btn-success">
+                            <button id="book-appointment-submit" type="button" class="btn btn-primary">
                                 <span class="glyphicon glyphicon-ok"></span>
                                 <?php
                                     echo (!$manage_mode) ? $this->lang->line('confirm')
@@ -416,17 +429,8 @@
 
                 <div id="frame-footer">
                     Powered By
-                    <a href="http://easyappointments.org" target="_blank">Easy!Appointments</a>
-                    |
-                    <span id="select-language" class="label label-success">
-    		        	<?php echo ucfirst($this->config->item('language')); ?>
-    		        </span>
-                    <?php if ($this->session->userdata('user_id')): ?>
-                        |
-                        <a href="<?php echo $this->config->item('base_url'); ?>/index.php/backend">
-                            <?php echo $this->lang->line('backend_section'); ?>
-                        </a>
-                    <?php endif; ?>
+                    <a href="http://mcube.tn" target="_blank"><strong>Mcube Technologies</strong></a>
+                    
                 </div>
             </div>
         </div>

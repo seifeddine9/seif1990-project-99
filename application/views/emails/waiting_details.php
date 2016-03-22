@@ -1,18 +1,20 @@
 <html>
 <head>
-    <title>Waiting details</title>
+    <title>Waiting Details</title>
 </head>
 <body style="font: 13px arial, helvetica, tahoma;">
     <div class="email-container" style="width: 650px; border: 1px solid #eee;">
-        <div id="header" style="background-color: #3DD481; border-bottom: 4px solid #1A865F;
+        <div id="header"  style=" 
                 height: 45px; padding: 10px 15px;">
-            <strong id="logo" style="color: white; font-size: 20px;
-                    text-shadow: 1px 1px 1px #8F8888; margin-top: 10px; display: inline-block">
-                    $company_name</strong>
+               <div class='row'>
+           <img alt="Mcube Technologies" src="cid:my-attach" class=''/>
+  
+            </div>
+                    
         </div>
 
         <div id="content" style="padding: 10px 15px;">
-            <h2>$email_title</h2>
+         <br/>  <h2 style="color:#23b08a"><strong>$email_title</strong></h2>
             <p>$email_message</p>
 
             <h2>Appointment Details</h2>
@@ -55,8 +57,7 @@
                 </tr>
             </table>
 
-            <h2>Appointment Link</h2>
-            <a href="$appointment_link" style="width: 600px;">$appointment_link</a>
+
         </div>
   <br class="rwd-break"/> 
        <br class="rwd-break"/> 
@@ -66,15 +67,14 @@
       <strong>Bonne journée et à bientôt</strong>
       <br/>
       l'équipe Mcube Technologies
-       </div>
+       </div><br/><br/>
 
         <div id="footer" style="padding: 10px; text-align: center; margin-top: 10px;
                 border-top: 1px solid #EEE; background: #FAFAFA;">
             Powered by
-            <a href="http://mcube.tn" style="text-decoration: none;">MCube Technologies</a>
+      <a href="http://mcube.tn" style="color: #b02349;text-decoration: none;"><strong>MCube Technologies</strong></a>
            
         </div>
     </div>
 </body>
 </html>
-

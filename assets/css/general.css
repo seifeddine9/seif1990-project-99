@@ -57,18 +57,18 @@ body .ui-dialog #error-technical {
 }
 
 body .ui-datepicker {
-    border: 1px solid #3DD481;
+    border: 1px solid #54debc;
     border-radius: 2px;
     padding: 0;
 }
 
 body .ui-datepicker .ui-widget-header {
     border: none;
-    background: #3DD481;
+    background: #54debc;
 }
 
 body .ui-datepicker th {
-    background: #3DD481;
+    background: #54debc;
     color: #FFF;
 }
 
@@ -90,7 +90,7 @@ body .ui-datepicker td span {
 html body .ui-datepicker td a.ui-state-active {
     color: #FFF !important;
     font-weight: bold !important;
-    background: #3DD481 !important;
+    background: #b02349 !important;
     border-radius: 50px;
     width: 22px;
     height: 22px;
@@ -99,7 +99,7 @@ html body .ui-datepicker td a.ui-state-active {
 }
 
 body .ui-datepicker td a.ui-state-highlight {
-    background: #80E3AD !important;
+    background: #e16888 !important;
     border-radius: 67px;
     color: #FFF !important;
     width: 22px;
@@ -166,3 +166,17 @@ li.language:hover {
 
 .ui-timepicker-div .ui-datepicker .ui-datepicker-buttonpane { border: none; margin: 0; }
 .ui-datepicker .ui-datepicker-buttonpane button { padding: .2em .6em 0.2em .6em; font-size: 12px; }
+.pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover{
+
+  background-color: #9ce0cf !important;
+  border-color: #9ce0cf !important;
+
+}
+.pagination>li>a:focus, .pagination>li>a:hover, .pagination>li>span:focus, .pagination>li>span:hover {
+      background-color: #9ce0cf !important;
+  border-color: #9ce0cf !important;
+}
+.pagination>li>a, .pagination>li>span{
+
+    color: #23b08a !important;
+}

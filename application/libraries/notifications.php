@@ -119,6 +119,7 @@ class Notifications {
         $mail->From = $company_settings['company_email'];
         $mail->FromName = $company_settings['company_name'];
         $mail->AddAddress($receiver_address); // "Name" argument crushes the phpmailer class.
+        $mail->AddEmbeddedImage("assets/img/logo_soc.png", "my-attach", "rocks.png");
 
          $smtphost = "ssl://smtp.gmail.com";
         $smtpport = 465;  

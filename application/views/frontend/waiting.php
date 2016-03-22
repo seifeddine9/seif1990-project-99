@@ -259,7 +259,8 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="main-navigation">
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="<?php echo  site_url('user/company');?>" ><strong>Notre  agence</strong></a></li>
+                    <li><a href="<?php  echo $this->config->item('base_url'); ?>" ><strong>Acceuil</strong></a></li>
+					<li><a href="<?php echo  site_url('user/company');?>" ><strong>Notre  agence</strong></a></li>
                     <li><a href="<?php echo  site_url('user/services');?>"><strong>Nos services</strong></a></li>
                     <li><a href="<?php echo  site_url('user/tarif');?>"><strong>Tarifs</strong></a></li>
                       <li><a href="<?php echo  site_url('user/work_for_us');?>"><strong>Nous rejoindre</strong></a></li>

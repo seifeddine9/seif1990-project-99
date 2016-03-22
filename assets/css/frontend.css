@@ -19,7 +19,7 @@ body {
 }
 
 body {
-    background-color: #CAEDF3;
+    background-color: #ebfbf6;
 }
 
 #main {
@@ -32,7 +32,10 @@ body {
     display: table-cell;
     vertical-align: middle;
 }
-
+a{
+    color: #b02349 ;
+    text-decoration: none;
+}
 
 /* BOOK APPOINTMENT WIZARD
  ------------------------------------------------------------------------------ */
@@ -46,8 +49,8 @@ body {
 #book-appointment-wizard #header {
     padding: 5px;
     height: 90px;
-    background: #3DD481;
-    border-bottom: 4px solid #1A865F;
+    background: #54debc;
+
 }
 
 #book-appointment-wizard #company-name {
@@ -105,14 +108,14 @@ body {
     padding: 1px;
     margin-right: 10px;
     margin-top: 9px;
-    border: 3px solid #38A07A;
+    border: 3px solid #54debc;
 }
 
 #book-appointment-wizard .book-step strong {
     font-size: 12px;
     display: block;
     text-align: center;
-    color: #A9C5BB;
+    color: #54debc;
 }
 
 #book-appointment-wizard .active-step {
@@ -124,11 +127,11 @@ body {
     padding: 1px;
     margin-right: 10px;
     margin-top: 3px;
-    border: 3px solid #38A07A;
+    border: 3px solid #54debc;
 }
 
 #book-appointment-wizard .active-step strong {
-    color: #38A07A;
+    color: #54debc;
     font-size: 18px;
 }
 
@@ -151,12 +154,12 @@ body {
 
 #book-appointment-wizard #available-hours .available-hour:hover {
     font-weight: bold;
-    background-color: #CAEDF3;
+    background-color: #9ce0cf ;
     cursor: pointer;
 }
 
 #book-appointment-wizard #available-hours .selected-hour {
-    color: #0088cc;
+    color: #b02349 ;
     font-weight: bold;
     text-decoration: underline;
 }
@@ -500,4 +503,33 @@ body {
     #success-frame {
         height: 100%;
     }
+}
+button#cancel-appointment {
+    background-color: #b02349 !important;
+    border: none;
+}
+button#cancel-appointment:active,
+button#cancel-appointment:focus, 
+button#cancel-appointment:hover{
+    border: none;
+}
+.btn-primary {
+  background-color: #23b08a  ;
+  border-color: #23b08a;
+  color: #fff;
+}
+.btn-primary:hover {
+  background-color: #b02349 ;
+  border-color: #b02349 ;
+  color: #fff;
+}
+
+.confirmation-details
+{
+
+    box-shadow: 0px 0px 10px 4px rgba(119, 119, 119, 0.75);
+-moz-box-shadow: 0px 0px 10px 4px rgba(119, 119, 119, 0.75);
+-webkit-box-shadow: 0px 0px 10px 4px rgba(119, 119, 119, 0.75);
+border-radius: 10px;
+padding: 10px;
 }

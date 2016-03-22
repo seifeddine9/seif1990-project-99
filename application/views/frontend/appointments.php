@@ -128,7 +128,14 @@
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+<style type="text/css">
+    
 
+    @media (max-width: 380px){}
+#book-appointment-wizard #wizard-frame-2 .frame-container .frame-content {
+    margin-left: 0% !important;
+}}
+</style>
 
     <script type="text/javascript">
 
@@ -255,7 +262,7 @@
                         <h3>
                             Mes Rendez-Vous
                         </h3>
-                        <div id="my-appointments" class=" table-responsive">
+                        <div id="my-appointments" >
 
                             <ul id="tabs-appointments" >
                                 <li><a href="#future-appointments"><strong>Future Rendez-vous</strong></a></li>
@@ -479,30 +486,39 @@
                 ?>
 
                 <div id="wizard-frame-2" class="wizard-frame" style="display:none;">
-                    <div class="frame-container">
+                   <div class="frame-container">
+
+
+
 
                         <div class="frame-content row">
 
                             <h4  style="color: #333; text-align: center;">Choisissez la date et l'heure de votre rendez-vous</h4>
-                            <div class="col-md-6 col-sm-6 col-xs-6 ">
+                            <div class="col-md-5 col-sm-5 col-xs-6 col-xxs">
                                 <br/> <div id="select-date"></div>
                             </div>
 
-                                   <div class="col-md-6 col-sm-6 col-xs-5 col-xxs  mobile-div">
+                              <div class="col-md-1 col-sm-1 "  ></div>
+
+
+
+                            <div class="col-md-6 col-sm-6 col-xs-12 col-xxs "  >
                                 <?php // Available hours are going to be fetched via ajax call.   ?>
-                                <br/><div id="available-hours"></div>
-                            </div>
+             
+                             <br/><button type="button" class="btn  btn-primary hours dropdown-toggle" data-toggle="dropdown" >heure du rendez-vous </button>
+                              <ul id="available-hours" class="dropdown-menu option" role="menu"></ul>
+                           </div>
                         </div>
                         <br/>
                         <div class="waiting-appointment">
-                            <p class="ask-dispo" ></p>
+                            <p class="ask-dispo"  ></p>
 
                         </div>
                     </div>
 
                     <div class="command-buttons">
-                 <button class="waiting-appointment btn btn-primary" id="waiting-appointment" 
-                                    type="button" data-toggle="modal" data-target="#waiting-modal">Demander un rendez-vous&nbsp;&nbsp;<span class="glyphicon glyphicon-plus"></span></button>
+                          <button class="waiting-appointment btn btn-primary" id="waiting-appointment" 
+                                    type="button" data-toggle="modal" data-target="#waiting-modal"> Demander un rendez-vous&nbsp;&nbsp;<span class="glyphicon glyphicon-plus"></span></button>
                         <button type="button" id="button-back-2" class="btn button-back btn-primary"
                                 data-step_index="2">
                             <span class="glyphicon glyphicon-backward"></span>
