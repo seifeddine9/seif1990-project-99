@@ -175,6 +175,13 @@ src="<?php echo $base_url; ?>/assets/ext/jquery-jeditable/jquery.jeditable.min.j
                             <button type="button" id="show-provider" class="btn btn-default" data-toggle="button" aria-pressed="false">
                                 <span class="glyphicon glyphicon-user"></span> Montrer la liste des fournisseurs</button>
                         </div>
+                        <div class="form-group">
+                            <label for="sms-notification">
+                                Envoyer des notifications sms
+                            </label>				
+                            <button type="button" id="sms-notification" class="btn btn-default" data-toggle="button" aria-pressed="false">
+                                <span class="glyphicon glyphicon-phone"></span> Activer les notifications sms</button>
+                        </div>
                     </div>
                 </div>
             </fieldset>

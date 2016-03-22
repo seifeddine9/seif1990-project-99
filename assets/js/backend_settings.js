@@ -66,6 +66,9 @@ var BackendSettings = {
             if (setting.name == 'enable_google' && setting.value == '1') {
                 $('#enable-google').addClass('active');
             }
+            if (setting.name == 'sms_notification' && setting.value == '1') {
+                $('#sms-notification').addClass('active');
+            }
             if (setting.name == 'show_provider' && setting.value == '1') {
                 $('#show-provider').addClass('active');
             }
@@ -321,6 +324,11 @@ SystemSettings.prototype.get = function () {
     settings.push({
         'name': 'enable_google',
         'value': $('#enable-google').hasClass('active') === true ? '1' : '0'
+    });
+    
+    settings.push({
+        'name': 'sms_notification',
+        'value': $('#sms-notification').hasClass('active') === true ? '1' : '0'
     });
     
     settings.push({

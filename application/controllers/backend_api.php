@@ -179,10 +179,24 @@ class Backend_api extends CI_Controller {
 
 
                 // :: add notification RECORD to DATABASE
-                $notifications['message_action'] = 'le client ' . $customer['first_name'] . ' a ajouté un rendez-vous le ' . $appointment['book_datetime'] . ' pour le service ' . $service['name'];
-                $notifications['type'] = 'nouveau rendez-vous';
-                $notifications['id'] = $this->notifications_model->insert($notifications);
 
+                if (!$manage_mode) {
+                    $notifications['message_action'] = 'le client ' . $customer['first_name'] . ' a ajouté un rendez-vous le ' . $appointment['book_datetime'] . ' pour le service ' . $service['name'];
+
+                    $notifications['type'] = 'nouveau rendez-vous';
+                } else {
+                    $notifications['message_action'] = 'le client ' . $customer['first_name'] . ' a modifié un rendez-vous le ' . $appointment['book_datetime'] . ' pour le service ' . $service['name'];
+                    $notifications['type'] = 'rendez-vous modifié';
+                }
+                $notifications['id'] = $this->notifications_model->insert($notifications);
+                
+                // :: Send sms notification
+                
+                if (!$manage_mode) {
+                    $this->send_sms($customer['phone_number'], 'Votre demande de rendez-vous a été confirmée');
+                } else {
+                    $this->send_sms($customer['phone_number'], 'Votre rendez-vous a été modifiée');
+                }
 
                 // :: SYNC APPOINTMENT CHANGES WITH GOOGLE CALENDAR
                 try {
@@ -417,9 +431,6 @@ class Backend_api extends CI_Controller {
         }
     }
 
-   
-    
-    
     /**
      * [AJAX] Delete appointment from the database.
      *
@@ -468,6 +479,12 @@ class Backend_api extends CI_Controller {
             $notifications['message_action'] = 'le client ' . $customer['first_name'] . ' a supprimer un rendez-vous le ' . $appointment['book_datetime'] . ' pour le service ' . $service['name'];
             $notifications['type'] = 'rendez-vous supprimé';
             $notifications['id'] = $this->notifications_model->insert($notifications);
+            
+            // :: SEND SMS NOTIFICATION
+            
+            if ($this->settings_model->get_setting('sms_notification') == '1') {
+                $this->send_sms($customer['phone_number'], 'Votre rendez-vous a été annulé');
+            }
 
             // :: SYNC DELETE WITH GOOGLE CALENDAR
             if ($appointment['id_google_calendar'] != NULL) {
@@ -1117,7 +1134,7 @@ class Backend_api extends CI_Controller {
 
 
             $notification_list = $this->notifications_model->get_batch();
-            
+
             /**
               foreach($notification_list as &$notification_lists) {
               $notification_lists['service'] = $this->services_model
@@ -1203,7 +1220,7 @@ class Backend_api extends CI_Controller {
             $confirmed = $this->appointments_model->get_count_confirmed_filter($date_debut, $date_fin);
             $projected = $this->appointments_model->get_count_projected_filter($date_debut, $date_fin);
 
-            $result = array('all' => $all,'all_price'=>$all_price, 'confirmed' => $confirmed, 'projected' => $projected);
+            $result = array('all' => $all, 'all_price' => $all_price, 'confirmed' => $confirmed, 'projected' => $projected);
 
             echo json_encode($result);
         } catch (Exception $exc) {
@@ -1718,6 +1735,28 @@ class Backend_api extends CI_Controller {
                 'exceptions' => array(exceptionToJavaScript($exc))
             ));
         }
+    }
+    
+    public function send_sms($number, $msg) {
+        $account_sid = 'AC6d404c29766c9fb0a78ef68e3c44a943';
+        $auth_token = 'e808b72821d3577d36b5c7727035b02e';
+
+        $http = new Services_Twilio_TinyHttp(
+                'https://api.twilio.com', array('curlopts' => array(
+                CURLOPT_SSL_VERIFYPEER => true,
+                CURLOPT_SSL_VERIFYHOST => 2,
+            ))
+        );
+
+        $client = new Services_Twilio($account_sid, $auth_token, "2010-04-01", $http);
+
+        $client->account->messages->create(array(
+            'To' => $number,
+            'From' => '+12013836183',
+            'Body' => $msg,
+        ));
+
+        //$client->account->messages->sendMessage('+12013836183',$number,$msg);
     }
 
 }

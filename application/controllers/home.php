@@ -516,8 +516,8 @@ class home extends CI_Controller {
             $this->load->model('services_model');
             $this->load->model('settings_model');
             $this->load->model('notifications_model');
-            
-            
+
+
             // Check whether the appointment hash exists in the database.
             $records = $this->appointments_model->get_batch(array('hash' => $appointment_hash));
             if (count($records) == 0) {
@@ -541,9 +541,9 @@ class home extends CI_Controller {
             }
             // :: SEND SMS NOTIFICATION TO CUSTOMER AND PROVIDER
 
-            
-            $this->send_sms($customer['phone_number'],'Votre rendez-vous a été annulé');
-
+            if ($this->settings_model->get_setting('sms_notification') == '1') {
+                $this->send_sms($customer['phone_number'], 'Votre rendez-vous a été annulé');
+            }
             // :: add notification RECORD to DATABASE
 
             $notifications['message_action'] = 'le client ' . $customer['first_name'] . ' a supprimer un rendez-vous le ' . $appointment['book_datetime'] . ' pour le service ' . $service['name'];
@@ -1105,9 +1105,14 @@ class home extends CI_Controller {
             // :: add notification RECORD to DATABASE
 
             $appointment['book_datetime'] = $this->appointments_model->get_value('book_datetime', $appointment['id']);
-            $notifications['message_action'] = 'le client ' . $customer['first_name'] . ' a ajouté un rendez-vous le ' . $appointment['book_datetime'] . ' pour le service ' . $service['name'];
-            $notifications['type'] = 'nouveau rendez-vous';
 
+            if (!$post_data['manage_mode']) {
+                $notifications['message_action'] = 'le client ' . $customer['first_name'] . ' a ajouté un rendez-vous le ' . $appointment['book_datetime'] . ' pour le service ' . $service['name'];
+                $notifications['type'] = 'nouveau rendez-vous';
+            } else {
+                $notifications['message_action'] = 'le client ' . $customer['first_name'] . ' a modifié un rendez-vous le ' . $appointment['book_datetime'] . ' pour le service ' . $service['name'];
+                $notifications['type'] = 'rendez-vous modifié';
+            }
             $notifications['id'] = $this->notifications_model->insert($notifications);
 
             // :: SYNCHRONIZE APPOINTMENT WITH PROVIDER'S GOOGLE CALENDAR
@@ -1144,35 +1149,34 @@ class home extends CI_Controller {
             //$this->load->library('Smsapi');
             //$this->Smsapi->send_sms('+21653534003','hello');
             /**
-            $account_sid = 'AC6d404c29766c9fb0a78ef68e3c44a943';
-            $auth_token = 'e808b72821d3577d36b5c7727035b02e';
+              $account_sid = 'AC6d404c29766c9fb0a78ef68e3c44a943';
+              $auth_token = 'e808b72821d3577d36b5c7727035b02e';
 
-            $http = new Services_Twilio_TinyHttp(
-                    'https://api.twilio.com', array('curlopts' => array(
-                    CURLOPT_SSL_VERIFYPEER => true,
-                    CURLOPT_SSL_VERIFYHOST => 2,
-                ))
-            );
+              $http = new Services_Twilio_TinyHttp(
+              'https://api.twilio.com', array('curlopts' => array(
+              CURLOPT_SSL_VERIFYPEER => true,
+              CURLOPT_SSL_VERIFYHOST => 2,
+              ))
+              );
 
-            $ali = new Services_Twilio($account_sid, $auth_token, "2010-04-01", $http);
+              $ali = new Services_Twilio($account_sid, $auth_token, "2010-04-01", $http);
 
-            $ali->account->messages->create(array(
-                'To' => '+21653534003',
-                'From' => '+12013836183',
-                'Body' => 'le client ' . $customer['first_name'] . ' a ajouté un rendez-vous le ' . $appointment['book_datetime'] . ' pour le service ' . $service['name'],
-            ));
-            **/
-            
-            
-            
-            if (!$post_data['manage_mode']) {
-                $this->send_sms($customer['phone_number'],'Votre demande de rendez-vous a été confirmée');
-            }else{
-                $this->send_sms($customer['phone_number'],'Votre rendez-vous a été modifiée');
+              $ali->account->messages->create(array(
+              'To' => '+21653534003',
+              'From' => '+12013836183',
+              'Body' => 'le client ' . $customer['first_name'] . ' a ajouté un rendez-vous le ' . $appointment['book_datetime'] . ' pour le service ' . $service['name'],
+              ));
+             * */
+            if ($this->settings_model->get_setting('sms_notification') == '1') {
+
+                if (!$post_data['manage_mode']) {
+                    $this->send_sms($customer['phone_number'], 'Votre demande de rendez-vous a été confirmée');
+                } else {
+                    $this->send_sms($customer['phone_number'], 'Votre rendez-vous a été modifiée');
+                }
             }
 
 
-            
             // :: SEND NOTIFICATION EMAILS TO BOTH CUSTOMER AND PROVIDER
             try {
                 $this->load->library('Notifications');
@@ -1279,11 +1283,11 @@ class home extends CI_Controller {
             $notifications['type'] = 'nouveau demande liste d attente';
 
             $notifications['id'] = $this->notifications_model->insert($notifications);
-            
-            
-            
-            $this->send_sms($customer['phone_number'],'Votre demande de liste d attente a été envoyer');
 
+
+            if ($this->settings_model->get_setting('sms_notification') == '1') {
+                $this->send_sms($customer['phone_number'], 'Votre demande de liste d attente a été envoyer');
+            }
             // :: SEND NOTIFICATION EMAILS TO BOTH CUSTOMER AND PROVIDER
             try {
                 $this->load->library('Notifications');
@@ -1368,29 +1372,27 @@ class home extends CI_Controller {
 
         return TRUE;
     }
-    
-    public function send_sms($number,$msg)
-    {
+
+    public function send_sms($number, $msg) {
         $account_sid = 'AC6d404c29766c9fb0a78ef68e3c44a943';
-            $auth_token = 'e808b72821d3577d36b5c7727035b02e';
+        $auth_token = 'e808b72821d3577d36b5c7727035b02e';
 
-            $http = new Services_Twilio_TinyHttp(
-                    'https://api.twilio.com', array('curlopts' => array(
-                    CURLOPT_SSL_VERIFYPEER => true,
-                    CURLOPT_SSL_VERIFYHOST => 2,
-                ))
-            );
+        $http = new Services_Twilio_TinyHttp(
+                'https://api.twilio.com', array('curlopts' => array(
+                CURLOPT_SSL_VERIFYPEER => true,
+                CURLOPT_SSL_VERIFYHOST => 2,
+            ))
+        );
 
-            $client = new Services_Twilio($account_sid, $auth_token, "2010-04-01", $http);
-            
-            $client->account->messages->create(array(
-                'To' => $number,
-                'From' => '+12013836183',
-                'Body' => $msg,
-            ));
-          
-            //$client->account->messages->sendMessage('+12013836183',$number,$msg);
-                
+        $client = new Services_Twilio($account_sid, $auth_token, "2010-04-01", $http);
+
+        $client->account->messages->create(array(
+            'To' => $number,
+            'From' => '+12013836183',
+            'Body' => $msg,
+        ));
+
+        //$client->account->messages->sendMessage('+12013836183',$number,$msg);
     }
 
     protected function no_cache() {

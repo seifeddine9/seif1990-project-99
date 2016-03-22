@@ -821,7 +821,8 @@ body .form-horizontal .controls {
 #settings-page #require-captcha,
 #settings-page #enable-double,
 #settings-page #enable-google,
-#settings-page #show-provider{
+#settings-page #show-provider,
+#settings-page #sms-notification{
     outline: none;
 }
 
@@ -830,7 +831,8 @@ body .form-horizontal .controls {
 #settings-page #customer-notifications.active,
 #settings-page #require-captcha.active,
 #settings-page #enable-google.active,
-#settings-page #show-provider.active{
+#settings-page #show-provider.active,
+#settings-page #sms-notification.active{
     background: #B6DCFF;
 }
 
