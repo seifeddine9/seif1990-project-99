@@ -8,10 +8,25 @@
     type="text/css"
     href="<?php echo $this->config->item('base_url'); ?>assets/css/style_portfolio.css">
 
+ <link
+        rel="stylesheet"
+        type="text/css"
+        href="<?php echo $this->config->item('base_url'); ?>assets/ext/bootstrap/css/bootstrap-social.css">
 <link
     rel="stylesheet"
     type="text/css"
     href="<?php echo $this->config->item('base_url'); ?>assets/ext/jquery-ui/jquery-ui.min.css">
+ <link
+        rel="stylesheet"
+        type="text/css"
+        href="<?php echo $this->config->item('base_url'); ?>assets/ext/bootstrap/css/bootstrap-social.css">    <link
+        rel="stylesheet"
+        type="text/css"
+        href="<?php echo $this->config->item('base_url'); ?>assets/ext/intl-tel-input/intlTelInput.css">
+            <link
+        rel="stylesheet"
+        type="text/css"
+        href="<?php echo $this->config->item('base_url'); ?>assets/ext/intl-tel-input/intlTelInput.css">
 <link
     rel="stylesheet"
     type="text/css"
@@ -35,6 +50,15 @@ src="<?php echo $this->config->item('base_url'); ?>assets/js/frontend_book_succe
 <script
     type="text/javascript"
 src="<?php echo $this->config->item('base_url'); ?>assets/ext/masonry.pkgd.min.js"></script>
+
+   <script
+        type="text/javascript"
+        src="<?php echo $this->config->item('base_url'); ?>assets/ext/intl-tel-input/intlTelInput.js"></script>
+<?php  /********
+                 Script for facebook javascript sdk*********/ ?>
+
+ <script src="http://connect.facebook.net/en_US/all.js"></script>
+
 
 <script type="text/javascript">
 
@@ -63,8 +87,104 @@ src="<?php echo $this->config->item('base_url'); ?>assets/ext/masonry.pkgd.min.j
         FrontendService.initialize(true, GlobalVariables.manageMode);
 
     });
+  function checkLoginState() {
+              FB.getLoginStatus(function(response) {
+
+                    if (response.status === 'connected') {
+      // Logged into your app and Facebook.
+    FB.api('/me?fields=id,name,link,email,gender,picture,first_name,last_name,about', function(response) {
+                var formData = new Object();
+                  formData['customer'] = { 'idfacebook': response.id };
+
+                var postData = {
+                    'csrfToken': GlobalVariables.csrfToken,
+                    'post_data': formData
+                };
+
+                  
+           var postUrl = GlobalVariables.baseUrl + 'index.php/user/login_facebook';
+
+             $.post(postUrl, postData, function (data) {
 
 
+
+if(data =='AJAX_FAILURE')
+{                              $('.update-address-phone-number').removeClass('hidden');
+                               $('.cnx-choice').addClass('hidden'); 
+
+                   $('#first-name').val(response.first_name);
+                    $('#last-name').val(response.last_name);
+                    $('#email').val(response.email);
+                    $('#idfacebook').val(response.id);
+                    $('#picture').val(response.picture.data.url);
+                     
+
+}
+                     else
+                       {
+
+                    $('#first-name').val(data.first_name);
+                    $('#last-name').val(data.last_name);
+                    $('#email').val(data.email);
+                    $('#phone-number').val(data.phone_number);
+                    $('#city').val(data.city);
+                    $('#address').val(data.address);
+                    $('#zip-code').val(data.zip_code);
+
+
+
+                                        $('#not-logged-in').html(' <a href="#" class="" data-toggle="dropdown" > <strong>' + data.first_name + " " + data.last_name + ' </strong><span class=" fa fa-angle-down"></span></a>' +
+                            '<ul class="dropdown-menu dropdown-usermenu animated fadeInDown pull-right">' +
+                            '<?php $active = ($active_menu == PRIV_APPOINTMENTS) ? "active" : ""; ?>' +
+                            '<li class="<?php echo $active; ?>" ><a <a href="' + GlobalVariables.baseUrl + 'index.php/home/appointments"><span> Mes Rendez-vous</span></a> </li>' +
+                            '<?php $active = ($active_menu == PRIV_PROFILE) ? "active" : ""; ?>' +
+                            '<li  class="<?php echo $active; ?>" > <a href="' + GlobalVariables.baseUrl + 'index.php/home/profile"> <span>Mon Profile</span> </a> </li>' +
+                            '<?php $active = ($active_menu == PRIV_WAITING) ? "active" : ""; ?>' +
+                            '<li  class="<?php echo $active; ?>" > <a href="' + GlobalVariables.baseUrl + 'index.php/home/waiting"> <span>Liste d\'attente</span> </a> </li>' +
+                            '<li>' +
+                            '<a href="javascript:;"><span>Aide</span></a>' +
+                            '</li>' +
+                            '<li><a  href="' + GlobalVariables.baseUrl + 'index.php/user/logout"><hr><i class="fa fa-sign-out pull-right"></i> Déconnexion</a>' +
+                            '</li>' +
+                            '</ul>');
+
+
+
+                         var customerData = new Object();
+                    customerData = {
+                        'user_id': data.id,
+                        'first_name': data.first_name,
+                        'last_name': data.last_name,
+                        'email': data.email,
+                        'phone_number': data.phone_number,
+                        'address': data.address,
+                        'city': data.city,
+                        'zip_code': data.zip_code,
+                        'role_slug': data.role_slug
+                    };
+                    GlobalVariables.customerData = customerData;
+                    console.log(GlobalVariables.customerData);
+
+
+                    FrontendService.updateConfirmFrame();
+
+                         var nextTabIndex = parseInt($('#button-next-3').attr('data-step_index')) + 1;
+                  $('#button-next-3.btn.button-next.btn-primary').parents().eq(1).hide('fade', function () {
+                        $('.active-step').removeClass('active-step');
+                        $('#step-' + nextTabIndex).addClass('active-step');
+                        $('#wizard-frame-' + nextTabIndex).show('fade');
+                    });
+                       }
+
+
+
+              },'json');
+
+
+         
+      }); }  });   }
+
+ 
 </script>
 
 
@@ -94,22 +214,6 @@ src="<?php echo $this->config->item('base_url'); ?>assets/ext/masonry.pkgd.min.j
         </div>
     </div>
 </section>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -326,6 +430,41 @@ src="<?php echo $this->config->item('base_url'); ?>assets/ext/masonry.pkgd.min.j
 
                             </div>
 
+                                       
+
+                            <div class="row update-address-phone-number frame-content  hidden"  >
+                                <br/>
+                                <div class="col-xs-offset-2 col-xs-8  col-xs-offset-2"><h3 > Compléter vos coordonnées avant de continuer</h3>
+                                
+                                    <form role="form" id="coordonnee">
+                                    <div class="form-group">
+                                        <label for="phone-number-fb" class="  control-label"><?php echo $this->lang->line('phone_number'); ?> *</label>
+                                        <br/><input type="text" id="phone-number-fb" name="phone-number-fb" class="form-control"  placeholder="Téléphone"  maxlength="60"  />
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="address-fb" class="  control-label"><?php echo $this->lang->line('address'); ?> *</label>
+                                        <input type="text" id="address-fb" name="address-fb" class="form-control"  placeholder="Addresse"    />
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="city-fb" class=" control-label"><?php echo $this->lang->line('city'); ?> *</label>
+                                        <input type="text" id="city-fb" name="city-fb" class="form-control"  placeholder="Ville"    />
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="zip-code-fb" class=" control-label"><?php echo $this->lang->line('zip_code'); ?> *</label>
+                                        <input type="text" id="zip-code-fb" name="zip-code-fb" class="form-control"  placeholder="Code postal"    />
+                                    </div>
+
+
+                                    </form>
+                                </div>
+                         
+                            </div>
+                       
+
+
 
                             <div class="row cnx-choice">
                                 <br/>
@@ -345,6 +484,8 @@ src="<?php echo $this->config->item('base_url'); ?>assets/ext/masonry.pkgd.min.j
 
 
                                     </form>
+                              <br/><br/>     <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">Connexion avec Facebook
+</fb:login-button>
                                 </div>
                                 <div class="col-sm-6"><h3>Pas encore membre?</h3>
                                     <p>Inscrivez- vous maintenant</p>
@@ -352,6 +493,7 @@ src="<?php echo $this->config->item('base_url'); ?>assets/ext/masonry.pkgd.min.j
                                         <span class="sign-up"><i class="fa fa-sign-in big-icon"></i></span>
                                     </p>
                                 </div>
+
                             </div>
                             <div class="alert hidden"></div>
                         </div>
@@ -384,6 +526,8 @@ src="<?php echo $this->config->item('base_url'); ?>assets/ext/masonry.pkgd.min.j
                 <input type="hidden" id ="address">
                 <input type="hidden" id ="city">
                 <input type="hidden" id ="zip-code">
+                <input type="hidden" id ="idfacebook">
+                <input type="hidden" id ="picture">
 
 
                 <?php
@@ -541,4 +685,3 @@ src="<?php echo $this->config->item('base_url'); ?>assets/ext/masonry.pkgd.min.j
   </div>
 </div>
 </div>
-

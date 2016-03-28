@@ -35,7 +35,7 @@ var GeneralFunctions = {
      * @param {array} messageButtons Contains the dialog
      * buttons along with their functions.
      */
-    displayMessageBox: function(title, message, messageButtons) {
+    displayMessageBox: function(title, message , type) {
         // Check arguments integrity.
         if (title == undefined || title == '') {
             title = '<No Title Given>';
@@ -45,38 +45,19 @@ var GeneralFunctions = {
             message = '<No Message Given>';
         }
 
-        if (messageButtons == undefined) {
+        /*if (messageButtons == undefined) {
             messageButtons = {};
             messageButtons[EALang['close']] = function() {
                 $('#message_box').dialog('close');
             };
-        }
+        }*/
 
-        // Destroy previous dialog instances.
-        $('#message_box').dialog('destroy');
-        $('#message_box').remove();
+       swal({
+  title: title,
+  text: message,
+  type: type
 
-        // Create the html of the message box.
-        $('body').append(
-            '<div id="message_box" title="' + title + '">' +
-            '<p>' + message + '</p>' +
-            '</div>'
-        );
-
-        $("#message_box").dialog({
-            autoOpen: false,
-            modal: true,
-            resize: 'auto',
-            width: 'auto',
-            height: 'auto',
-            resizable: false,
-            buttons: messageButtons,
-            closeOnEscape: true
-        });
-
-        $('#message_box').dialog('open');
-        $('.ui-dialog .ui-dialog-buttonset button').addClass('btn btn-default');
-        $('#message_box .ui-dialog-titlebar-close').hide();
+});
     },
 
     /**
@@ -206,26 +187,14 @@ var GeneralFunctions = {
      * @returns {string} Returns the html markup for the exceptions.
      */
     exceptionsToHtml: function(exceptions) {
-        var html =
-                '<div class="accordion" id="error-accordion">' +
-                    '<div class="accordion-group">' +
-                        '<div class="accordion-heading">' +
-                            '<a class="accordion-toggle" data-toggle="collapse" ' +
-                                    'data-parent="#error-accordion" href="#error-technical">' +
-                                EALang['details'] +
-                            '</a>' +
-                        '</div>';
+        var html ;
+                
 
         $.each(exceptions, function(index, exception) {
-            html +=
-                    '<div id="error-technical" class="accordion-body collapse">' +
-                        '<div class="accordion-inner">' +
-                            '<pre>' + exception['message'] + '</pre>' +
-                        '</div>' +
-                    '</div>';
+            html = exception['message'] ;
         });
 
-        html += '</div></div>';
+      
 
         return html;
     },
@@ -267,16 +236,20 @@ var GeneralFunctions = {
      */
     handleAjaxExceptions: function(response) {
         if (response.exceptions) {
+            var error ="error";
             response.exceptions = GeneralFunctions.parseExceptions(response.exceptions);
-            GeneralFunctions.displayMessageBox(GeneralFunctions.EXCEPTIONS_TITLE, GeneralFunctions.EXCEPTIONS_MESSAGE);
-            $('#message_box').append(GeneralFunctions.exceptionsToHtml(response.exceptions));
+            message = GeneralFunctions.exceptionsToHtml(response.exceptions);
+            GeneralFunctions.displayMessageBox(GeneralFunctions.EXCEPTIONS_TITLE, message, error);
+            //$('#message_box').append(GeneralFunctions.exceptionsToHtml(response.exceptions));
             return false;
         }
 
         if (response.warnings) {
+            var warning ="warning";
             response.warnings = GeneralFunctions.parseExceptions(response.warnings);
-            GeneralFunctions.displayMessageBox(GeneralFunctions.WARNINGS_TITLE, GeneralFunctions.WARNINGS_MESSAGE);
-            $('#message_box').append(GeneralFunctions.exceptionsToHtml(response.warnings));
+            message = GeneralFunctions.exceptionsToHtml(response.warnings);
+            GeneralFunctions.displayMessageBox(GeneralFunctions.WARNINGS_TITLE, GeneralFunctions.WARNINGS_MESSAGE , warning);
+            //$('#message_box').append(GeneralFunctions.exceptionsToHtml(response.warnings));
         }
 
         return true;
@@ -349,11 +322,11 @@ var GeneralFunctions = {
                 message: 'AJAX Error: ' + errorThrown
             }
         ];
-
+            var  type = error
         console.log('AJAX Failure Handler:', jqxhr, textStatus, errorThrown);
         GeneralFunctions.displayMessageBox(GeneralFunctions.EXCEPTIONS_TITLE,
-            GeneralFunctions.EXCEPTIONS_MESSAGE);
-        $('#message_box').append(GeneralFunctions.exceptionsToHtml(exceptions));
+            GeneralFunctions.exceptionsToHtml(exceptions), type);
+        //$('#message_box').append(GeneralFunctions.exceptionsToHtml(exceptions));
     },
 
     /**

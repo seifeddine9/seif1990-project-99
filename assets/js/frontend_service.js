@@ -43,6 +43,26 @@ var FrontendService = {
         if (window.console === undefined) {
             window.console = function () {} ;// IE compatibility
         }
+          window.fbAsyncInit = function() {
+  FB.init({
+    appId      : '535891186589773',
+    cookie     : true,  // enable cookies to allow the server to access 
+                        // the session
+    xfbml      : true,  // parse social plugins on this page
+    version    : 'v2.5' // use graph api version 2.5
+  });
+
+
+
+
+
+  };
+
+    $("#phone-number-fb").intlTelInput({
+  nationalMode: true,
+  utilsScript: GlobalVariables.baseUrl+"assets/ext/intl-tel-input/utils.js", // just for formatting/placeholders etc
+  autoPlaceholder: false
+});
 
         FrontendService.manageMode = manageMode;
         FrontendService.resetModalInput();
@@ -266,23 +286,6 @@ $('.service-title , .service-sous-title , .image-service , .service-description 
 
 $('#detail-modal').modal('hide');
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -555,7 +558,7 @@ $('#detail-modal').modal('hide');
                 if (jQuery.isEmptyObject(GlobalVariables.customerData))
                 {
                     var nextTabIndex = parseInt($(this).attr('data-step_index')) + 1;
-
+                          
                     $(this).parents().eq(1).hide('fade', function () {
                         $('.active-step').removeClass('active-step');
                         $('#step-' + nextTabIndex).addClass('active-step');
@@ -587,10 +590,18 @@ $('#detail-modal').modal('hide');
 
 
         });
+/*  when the user click on facebook log in 
+** 
+**
+ */
 
 
 
 
+/*
+** on click on button next  either check the user's email and password 
+*** or  sign him up 
+ */
 
         $(document).on("click", '#button-next-3', function (event) {
             // If we are on the first step and there is not provider selected do not continue
@@ -599,10 +610,10 @@ $('#detail-modal').modal('hide');
             var nextTabIndex = parseInt($(this).attr('data-step_index')) + 1;
 
 
-            if ($(".inscrit").hasClass("hidden"))
+            if ($(".inscrit").hasClass("hidden") && !$(".cnx-choice").hasClass("hidden") )
 
             {
-                $(".last-name ,.first-name , .password , .email , .phone-number , .address , .city ,.zip-code").removeClass("required");
+                $(".last-name ,.first-name , .password , .email , .phone-number , .address , .city ,.zip-code, #phone-number-fb , #address-fb , #city-fb , #zip-code-fb").removeClass("required");
                 $("#email-address , #password-cnx").addClass("required");
 
                 var postUrl = GlobalVariables.baseUrl + 'index.php/user/ajax_check_login_customer';
@@ -611,9 +622,9 @@ $('#detail-modal').modal('hide');
                     'email': $('#email-address').val(),
                     'password': $('#password-cnx').val()
                 };
-            } else if (!$(".inscrit").hasClass("hidden")) {
+            } else if (!$(".inscrit").hasClass("hidden") && $(".cnx-choice").hasClass("hidden") ) {
                 $(".last-name ,.first-name , .password , .email , .phone-number , .address , .city ,.zip-code").addClass("required");
-                $("#email-address , #password-cnx").removeClass("required");
+                $("#email-address , #password-cnx , #phone-number-fb , #address-fb , #city-fb , #zip-code-fb").removeClass("required");
 
                 var formData = new Object();
 
@@ -638,6 +649,36 @@ $('#detail-modal').modal('hide');
 
 
             }
+
+         else if (!$(".update-address-phone-number").hasClass("hidden") && $(".cnx-choice").hasClass("hidden") && $(".inscrit").hasClass("hidden") ) {
+                $("#phone-number-fb , #address-fb , #city-fb , #zip-code-fb").addClass("required");
+                $(".last-name ,.first-name , .password , .email , .phone-number , .address , .city ,.zip-code,#email-address , #password-cnx").removeClass("required");
+
+                var formData = new Object();
+
+                formData['customer'] = {
+                    'last_name': $('#last-name').val(),
+                    'first_name': $('#first-name').val(),
+                    'email': $('#email').val(),
+                    'phone_number': $('#phone-number-fb').val(),
+                    'address': $('#address-fb').val(),
+                    'city': $('#city-fb').val(),
+                    'zip_code': $('#zip-code-fb').val(),
+                    'idfacebook': $('#idfacebook').val(),
+                    'src_photo': $('#picture').val()
+
+                };
+
+                var postData = {
+                    'csrfToken': GlobalVariables.csrfToken,
+                    'post_data': formData
+                };
+                var postUrl = GlobalVariables.baseUrl + 'index.php/user/inscription2';
+
+
+            }
+
+
             console.log(postData);
             if (!FrontendService.validateCustomerForm()) {
                 return;
@@ -767,6 +808,8 @@ $('#detail-modal').modal('hide');
                     $('.alert').addClass('hidden');
                     $(".cnx-choice").removeClass('hidden');
                     $(".inscrit").addClass('hidden');
+                      $(".update-address-phone-number").addClass('hidden');
+
 
                 }
             });
@@ -1345,6 +1388,7 @@ $('#detail-modal').modal('hide');
         });
     }
 
+ 
 
 
 

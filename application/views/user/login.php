@@ -2,7 +2,24 @@
 
 
     <?php // INCLUDE CSS FILES ?>
-    
+        <link
+        rel="stylesheet"
+        type="text/css"
+        href="<?php echo $this->config->item('base_url'); ?>assets/ext/bootstrap/css/bootstrap-social.css">
+
+            <link
+        rel="stylesheet"
+        type="text/css"
+        href="<?php echo $this->config->item('base_url'); ?>assets/ext/intl-tel-input/intlTelInput.css">
+
+
+
+           <script
+        type="text/javascript"
+        src="<?php echo $this->config->item('base_url'); ?>assets/ext/intl-tel-input/intlTelInput.js"></script>  
+
+
+         <script src="http://connect.facebook.net/en_US/all.js"></script>
 
        <style>
 
@@ -75,6 +92,10 @@ color : #53a585 !important;
 
 }
 
+.btn-facebook {
+    width: 62%!important;
+      margin-left: 17% !important;}
+
        </style>
               
                 <!-- Extra CSS Libraries End -->
@@ -93,8 +114,147 @@ color : #53a585 !important;
         };
 
         var EALang = <?php echo json_encode($this->lang->language); ?>;
+          window.fbAsyncInit = function() {
+  FB.init({
+    appId      : '535891186589773',
+    cookie     : true,  // enable cookies to allow the server to access 
+                        // the session
+    xfbml      : true,  // parse social plugins on this page
+    version    : 'v2.5' // use graph api version 2.5
+  });
+
+
+
+
+
+  };
+
 
         $(document).ready(function() {
+
+         var customerData = new Object();
+
+           $(document).on("keypress" ,"#phone-number" , function(event) {
+             // console.log(isNaN(String.fromCharCode(event.which)));
+
+  if(event.which != 8 && isNaN(String.fromCharCode(event.which))){
+            event.preventDefault();
+        }
+});
+
+
+  checkLoginState = function () {
+
+              FB.getLoginStatus(function(response) {
+
+                    if (response.status === 'connected') {
+      // Logged into your app and Facebook.
+    FB.api('/me?fields=id,name,link,email,gender,picture,first_name,last_name,about', function(response) {
+                var formData = new Object();
+                  formData['customer'] = { 'idfacebook': response.id };
+
+                var postData = {
+                    'csrfToken': GlobalVariables.csrfToken,
+                    'post_data': formData
+                };
+
+                  
+           var postUrl = GlobalVariables.baseUrl + 'index.php/user/login_facebook';
+
+             $.post(postUrl, postData, function (data) {
+
+
+
+if(data =='AJAX_FAILURE')
+{                      
+
+  $('.coordonnee-facebook').removeClass('hidden');
+  $('.login-block').addClass('hidden'); 
+
+
+
+                     
+
+                    customerData = {
+                        'idfacebook': response.id,
+                        'first_name': response.first_name,
+                        'last_name': response.last_name,
+                        'email': response.email,
+                        'src_photo': response.picture.data.url
+
+                    };
+
+console.log(customerData);
+   // window.location.href =GlobalVariables.baseUrl + 'index.php/user/l_facebook';
+}
+     else {
+
+            window.location.href = GlobalVariables.destUrlCustomer;
+
+                       }
+
+
+
+              },'json');
+
+
+         
+      }); }  });  
+
+
+       }
+    $('#buttonNext').click(function(event){
+
+    var missingFields = false ; 
+
+      $('#coordonnee .required').each(function() {
+                if ($(this).val() == '') {
+                    $(this).parents('.form-group').addClass('has-error');
+
+      
+                  missingFields = true;
+
+  }
+
+});
+if(missingFields == true)
+ {return false; }
+
+ 
+
+
+   var formData = new Object();
+
+        formData['customer'] = {
+            'phone_number': $("#phone-number").intlTelInput("getNumber"),
+            'address': $('#address').val(),
+            'city': $('#city').val(),
+            'zip_code': $('#zip-code').val(),
+            'idfacebook' : customerData.idfacebook,
+            'first_name' : customerData.first_name,
+            'last_name' : customerData.last_name,
+            'src_photo' : customerData.src_photo,
+            'email' : customerData.email,
+        };
+
+ var postData = {
+            'csrfToken': GlobalVariables.csrfToken,
+            'post_data': formData
+        };
+  var postUrl = GlobalVariables.baseUrl + 'index.php/user/inscription';
+
+          
+
+ $.post(postUrl, postData, function(response) {
+                ////////////////////////////////////////////////////////////
+  window.location.href = GlobalVariables.baseUrl ;
+         
+  }, 'json');
+
+
+
+});
+
 
 
 
@@ -156,7 +316,7 @@ color : #53a585 !important;
 		<div class="full-content-center">
 
 			<div class="login-wrap animated flipInX">
-				<div class="login-block">
+				<div class="login-block  ">
           <div class="alert hidden"></div>
 					<img src="<?php echo $base_url;?>assets/img/logo.png" class="img-responsive not-logged-avatar" id ="avatar">
 					<form role="form" id="login-form">
@@ -175,23 +335,86 @@ color : #53a585 !important;
         </div>
 						<div class="row">
 							<div class="col-sm-6">
-							<button type="submit" id="login" class="btn btn-success btn-block"><?php echo $this->lang->line('login'); ?></button>
+							<button type="submit" id="login" class="btn btn-primary btn-block"><?php echo $this->lang->line('login'); ?></button>
 
 							</div>
 							<div class="col-sm-6">
-							<a href="<?php echo $base_url; ?>index.php/user/signup" class="btn btn-danger btn-block"><?php echo $this->lang->line('sign_up_now'); ?></a>
+							<a href="<?php echo $base_url; ?>index.php/user/signup" class="btn btn-primary btn-block"><?php echo $this->lang->line('sign_up_now'); ?></a>
 
               </div>
 						</div>
            <p ><a  href="<?php echo $base_url; ?>index.php/user/forgot_password" class="forgot-password">
                 <?php echo $this->lang->line('forgot_your_password'); ?></a></p>
 					</form>
-				</div>
+       
+   <br/>   <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">Connexion avec Facebook
+</fb:login-button>		
+		</div>
+
+
+                            <div class="row coordonnee-facebook hidden">
+                                <br/>
+                                <div class="col-xs-offset-2 col-xs-8  col-xs-offset-2"><h3 > Compléter vos coordonnées avant de continuer</h3>
+                                
+                                    <form role="form" id="coordonnee">
+                                <div class="col-md-12 col-sm-12  col-xs-12">
+                                    <div class="form-group">
+                                        <label for="phone-number" class=" hidden-xs control-label"><?php echo $this->lang->line('phone_number'); ?> *</label>
+                                        <br/><input type="text" id="phone-number" name="phone-number" class=" phone-number required form-control"  placeholder="Téléphone"  maxlength="60"  />
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12 col-sm-12  col-xs-12">
+                                    <div class="form-group">
+                                        <label for="address" class=" hidden-xs control-label"><?php echo $this->lang->line('address'); ?> *</label>
+                                        <input type="text" id="address" name="address" class=" address  required form-control"  placeholder="Addresse"    />
+                                    </div>
+                                </div>
+
+                                     <div class="col-md-6 col-sm-6  col-xs-12">
+                                    <div class="form-group">
+                                        <label for="city" class=" hidden-xs control-label"><?php echo $this->lang->line('city'); ?> *</label>
+                                        <input type="text" id="city" name="city" class=" city  required form-control"  placeholder="Ville"    />
+                                    </div>
+                                </div>   
+
+                                  <div class="col-md-6 col-sm-6  col-xs-12">
+                                    <div class="form-group">
+                                        <label for="zip-code" class=" hidden-xs control-label"><?php echo $this->lang->line('zip_code'); ?> *</label>
+                                        <input type="text" id="zip-code" name="zip-code" class=" zip-code required form-control"  placeholder="Code postal"    />
+                                    </div>
+                                </div>
+
+
+                                    </form>
+                                </div>
+                                                 <div class="command-buttons">
+
+                            <button type="button" id="buttonNext" class="btn button-next btn-primary">
+                                        Suivant
+                                <span class="glyphicon glyphicon-forward"></span>
+                            </button>
+
+                        </div>
+                            </div>
+
+
+
+
+
+
 			</div>
 			
 		</div>
 	</div>
+    <script type="text/javascript">
+$("#phone-number").intlTelInput({
+  nationalMode: true,
+  utilsScript: "<?php echo $this->config->item('base_url'); ?>assets/ext/intl-tel-input/utils.js", // just for formatting/placeholders etc
+  autoPlaceholder: false
+});
 
+    </script>
 	<!-- End of eoverlay modal -->
 	
   

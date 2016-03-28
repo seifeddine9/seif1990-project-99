@@ -270,7 +270,7 @@ public function updatee($customer) {
         // Validate required fields
         if (!isset($customer['last_name'])
                 || !isset($customer['email'])
-                || !isset($customer['phone_number'])) {
+            ) {
             throw new Exception('veuillez remplir tout les champs : '
                     . print_r($customer, TRUE));
         }
@@ -433,6 +433,38 @@ public function updatee($customer) {
     }
  
 
+
+    /**
+     * Find the database id of a customer record.
+     *
+     * The customer data should include the following fields in order to
+     * get the unique id from the database: "email"
+     *
+     * <strong>IMPORTANT!</strong> The record must already exists in the
+     * database, otherwise an exception is raised.
+     *
+     * @param array $customer Array with the customer data. The
+     * keys of the array should have the same names as the db fields.
+     * @return int Returns the id.
+     */
+    public function find_customer_id($idfacebook) {
+        if (!isset($idfacebook)) {
+            throw new Exception('Customer\'s idfacebook was not provided : '
+                    . print_r($idfacebook, TRUE));
+        }
+
+        // Get customer's role id
+        $result = $this->db
+                ->select('ea_users.id')
+                ->from('ea_users')
+                ->join('ea_roles', 'ea_roles.id = ea_users.id_roles', 'inner')
+                ->where('ea_users.idfacebook', $idfacebook)
+                ->where('ea_roles.slug', DB_SLUG_CUSTOMER)
+                ->get();
+
+
+        return $result->row()->id;
+    }
 
 }
 

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  127.0.0.1
--- Généré le :  Mar 22 Mars 2016 à 21:05
+-- Généré le :  Lun 28 Mars 2016 à 16:59
 -- Version du serveur :  10.1.9-MariaDB
 -- Version de PHP :  5.6.15
 
@@ -46,8 +46,6 @@ CREATE TABLE `ea_appointments` (
 
 INSERT INTO `ea_appointments` (`id`, `book_datetime`, `start_datetime`, `end_datetime`, `notes`, `hash`, `is_unavailable`, `id_users_provider`, `id_users_customer`, `id_services`, `id_google_calendar`) VALUES
 (274, '2016-03-17 11:12:01', '2016-03-21 11:15:00', '2016-03-21 11:55:00', NULL, '83c3a751c60a6074da0c29fce7d610b2', 0, 85, 156, 14, NULL),
-(275, '2016-03-17 11:12:58', '2016-03-21 11:15:00', '2016-03-21 11:55:00', NULL, '2f9800e2b50afdaacb757f3d705630b4', 0, 85, 156, 14, NULL),
-(276, '2016-03-17 11:14:35', '2016-03-21 10:15:00', '2016-03-21 10:55:00', NULL, 'e0f1d59a47e9018e82ce7be0103f3122', 0, 85, 156, 14, NULL),
 (279, '2016-03-17 11:32:08', '2016-03-18 10:15:00', '2016-03-18 10:55:00', NULL, '4b388d37e8803b3ae1d9babdaf621616', 0, 85, 156, 14, NULL),
 (280, '2016-03-17 11:35:40', '2016-03-21 12:30:00', '2016-03-21 13:10:00', NULL, '0d94b403ce0020f93b075a009972211b', 0, 85, 156, 14, NULL),
 (283, '2016-03-17 13:17:27', '2016-03-17 15:00:00', '2016-03-17 15:45:00', NULL, '0400e397d708233e91f796bf0e74da94', 0, 85, 156, 15, NULL),
@@ -66,32 +64,6 @@ CREATE TABLE `ea_notifications` (
   `date_action` datetime DEFAULT NULL,
   `type` text
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Contenu de la table `ea_notifications`
---
-
-INSERT INTO `ea_notifications` (`id`, `message_action`, `date_action`, `type`) VALUES
-(1, 'le client mohsen a ajouté un rendez-vous le 2016-03-20 20:28:15 pour le service menage 2h', '2016-03-20 20:28:15', 'nouveau rendez-vous'),
-(2, 'le client mohsen a ajouté un rendez-vous le 2016-03-20 20:30:05 pour le service azkjsyt', '2016-03-20 20:30:05', 'nouveau rendez-vous'),
-(3, 'le client mohsen a ajouté un rendez-vous le 2016-03-22 13:28:30 pour le service azkjsyt', '2016-03-22 13:28:30', 'nouveau rendez-vous'),
-(4, 'le client mohsen a demandé un rendez-vous le 2016-03-22 13:35:08 pour le service azkjsyt', '2016-03-22 13:35:08', 'nouveau demande liste d attente'),
-(5, 'le client mohsen a supprimer un rendez-vous le 2016-03-17 11:10:21 pour le service azkjsyt', '2016-03-22 13:35:49', 'rendez-vous supprimé'),
-(6, 'le client mohsen a ajouté un rendez-vous le 2016-03-22 14:03:41 pour le service Test Service', '2016-03-22 14:03:41', 'nouveau rendez-vous'),
-(7, 'le client mohsen a demandé un rendez-vous le 2016-03-22 14:04:17 pour le service azkjsyt', '2016-03-22 14:04:17', 'nouveau demande liste d attente'),
-(8, 'le client mohsen a supprimer un rendez-vous le 2016-03-22 13:28:30 pour le service azkjsyt', '2016-03-22 14:04:24', 'rendez-vous supprimé'),
-(9, 'le client mohsen a demandé un rendez-vous le 2016-03-22 14:08:28 pour le service Test Service', '2016-03-22 14:08:28', 'nouveau demande liste d attente'),
-(10, 'le client mohsen a demandé un rendez-vous le 2016-03-22 14:08:58 pour le service Test Service', '2016-03-22 14:08:58', 'nouveau demande liste d attente'),
-(11, 'le client mohsen a demandé un rendez-vous le 2016-03-22 14:12:44 pour le service Test Service', '2016-03-22 14:12:44', 'nouveau demande liste d attente'),
-(12, 'le client mohsen a demandé un rendez-vous le 2016-03-22 14:15:07 pour le service Test Service', '2016-03-22 14:15:07', 'nouveau demande liste d attente'),
-(13, 'le client mohsen a supprimer un rendez-vous le 2016-03-17 13:40:12 pour le service Test Service', '2016-03-22 14:15:14', 'rendez-vous supprimé'),
-(14, 'le client mohsen a demandé un rendez-vous le 2016-03-22 14:15:51 pour le service menage 4h', '2016-03-22 14:15:51', 'nouveau demande liste d attente'),
-(15, 'le client mohsen a demandé un rendez-vous le 2016-03-22 14:18:44 pour le service Test Service', '2016-03-22 14:18:44', 'nouveau demande liste d attente'),
-(16, 'le client mohsen a demandé un rendez-vous le 2016-03-22 14:19:51 pour le service Test Service', '2016-03-22 14:19:51', 'nouveau demande liste d attente'),
-(17, 'le client mohsen a supprimer un rendez-vous le 2016-03-22 14:03:41 pour le service Test Service', '2016-03-22 14:19:58', 'rendez-vous supprimé'),
-(18, 'le client mohsen a demandé un rendez-vous le 2016-03-22 14:20:15 pour le service azkjsyt', '2016-03-22 14:20:15', 'nouveau demande liste d attente'),
-(19, 'le client mohsen a demandé un rendez-vous le 2016-03-22 17:15:25 pour le service menage 2h', '2016-03-22 17:15:25', 'nouveau demande liste d attente'),
-(20, 'le client mohsen a supprimer un rendez-vous le 2016-03-20 20:28:15 pour le service menage 2h', '2016-03-22 17:15:43', 'rendez-vous supprimé');
 
 -- --------------------------------------------------------
 
@@ -141,8 +113,7 @@ CREATE TABLE `ea_secretaries_providers` (
 INSERT INTO `ea_secretaries_providers` (`id_users_secretary`, `id_users_provider`) VALUES
 (111, 85),
 (111, 109),
-(111, 113),
-(112, 85);
+(111, 113);
 
 -- --------------------------------------------------------
 
@@ -250,7 +221,7 @@ INSERT INTO `ea_settings` (`id`, `name`, `value`) VALUES
 (26, 'enable_double', '1'),
 (27, 'enable_google', '0'),
 (28, 'show_provider', '1'),
-(29, 'sms_notification', '0');
+(29, 'sms_notification', '1');
 
 -- --------------------------------------------------------
 
@@ -278,26 +249,25 @@ CREATE TABLE `ea_users` (
   `notes` text,
   `src_photo` text,
   `id_roles` bigint(20) UNSIGNED NOT NULL,
-  `username` varchar(256) DEFAULT NULL
+  `username` varchar(256) DEFAULT NULL,
+  `idfacebook` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Contenu de la table `ea_users`
 --
 
-INSERT INTO `ea_users` (`id`, `first_name`, `last_name`, `email`, `mobile_number`, `phone_number`, `address`, `city`, `zip_code`, `state`, `address2`, `city2`, `state2`, `zip_code2`, `password`, `salt`, `notes`, `src_photo`, `id_roles`, `username`) VALUES
-(84, 'seif', 'eddine', 'jandoubiseif.cj@gmail.com', '', '+21653534003', '', '', '', '', '', '', '', '', '08d7b1442b7a4fc0b59ba53e7b77929790793aa81451a70521e36dfbe4072528', '', '', NULL, 1, 'seif'),
-(85, 'John', 'Doe', 'jandoubiseif.cj@gmail.com', '', '+21653534003', '', '', '', '', '', '', '', '', '', '', '', NULL, 2, 'joe'),
-(101, 'amell', 'fezai', 'fezai.amel@gmail.com', NULL, '+21653534003', '', '', '', NULL, NULL, NULL, NULL, NULL, 'ea83a9354108cbeb047394f9619ed55a319edd3e6f439a5c7e3f78fdeb68a31a', 'd0de2e8fc7fbd52c58fc0da1a75eb072ce38ee1ebf4841a2ec703e88ca24e89a', NULL, 'assets/img/default_image.jpg', 3, 'llema'),
-(109, 'iuytr', 'rhtde', 'jgytf@iuytr.gt', '', '+21653534003', '', '', '', '', NULL, NULL, NULL, NULL, '95a6ebb3c42a345feff8bd683fb6a8580d3379cedfc313eec06d439163344b62', '376f83b5f3f5451781e30e81ae08db0d0c7792f69299c2811a5c873d8a4b0fb4', '', NULL, 2, 'jytrdyerdf'),
-(111, 'amal', 'amal', 'amal@amal.com', '', '+21653534003', '', '', '', '', NULL, NULL, NULL, NULL, 'c5c3588c7b94e88b51389572be5ba1446aef2bd6b423972d014e57383c354ffd', '7cd1c6c06abeb6e5f3d64cb214eb947b095934a9d98c37e5fcfeae0e7a812089', '', NULL, 4, 'amal'),
-(112, 'ali', 'ali', 'ali@gmail.com', '', '+21653534003', '', '', '', '', NULL, NULL, NULL, NULL, '477f67bd6549741b3bc477821b5db4ce4092e71f33529324aa112669bb7dff75', 'e07a0b61fe1bf65a1e68cf791985c9d8cd2c8db109f7ee8d1e17747328e90fdb', '', NULL, 4, 'ali'),
-(113, 'ali', 'ali', 'jandoubiseif@gmail.com', '', '+21653534003', '', '', '', '', NULL, NULL, NULL, NULL, '732d6f33eae6bc9404dcd8d85b30dd3fc261876d26348aabf29a319ee08b0680', '446d40623b69da2460cb5927816ff0d0519d83679d00f7ab3f94dd21d4b2daa6', '', NULL, 2, 'seifaa'),
-(156, 'mohsen', 'mohsen', 'jandoubiseif.if@gmail.com', NULL, '+21653534003', '', '', '', NULL, '', '', NULL, '', 'e5ccb7e2726cfa70eb0c168ff66e9a8eb6a3a18ebdb008be6adee54107854f13', 'a572106159f8c59febde5129a90c4f9a183363de728f98bd70f5020f01aca3b2', NULL, './uploads/Sans_titre.png', 3, 'moh'),
-(157, 'amel', 'fezai', 'amel.fezai@live.fr', NULL, '+21653534003', 'zertyu', 'ertyu', 'erty_', NULL, '', '', NULL, '', '9a7fb858f28f18e1f63ac45c15c7bc93cca62e7a2b1e29a41529957b5425dcd1', 'b2d5e366f41b65644b667f4650fd5274958986cb4695c4162f3c45c73a7c84d2', NULL, './uploads/961579_727491730701535_909717261_n.jpg', 3, 'amellll'),
-(158, '''(ty', 'defdrg', 'jandoubiscdedeeif.cj@gmail.com', NULL, '+21653534003', 'zaergthy', 'zedrfthyj', 'ezrty', NULL, NULL, NULL, NULL, NULL, 'f66c2990f8b7cd10ca1d795cf83bd90c2dbdb9a7661b6ff3e5b714d642bf30fc', '8ad7506ac09900810be6a0521fb2a74d1986d132b623601abd8370ffec38644b', NULL, 'assets/img/default_image.jpg', 3, NULL),
-(159, 'azefer', 'azert', 'aezrt@qfds.com', '', '+21653534003', '', '', '', '', NULL, NULL, NULL, NULL, '2130e961b60b665906cc1d7be4fa5aef8a88acd4a186d8afd3168f5fb6221b9d', '698e6b4c0a2be7a3059a529fddb828bdba94eb010cee585303ceb04ecba034d3', '', NULL, 1, 'azertyu'),
-(160, 'sqfdg', 'sdfgnh', 'dqsddf@dsfbg.com', '', '451356156415', '', '', '', '', NULL, NULL, NULL, NULL, '20a486eab7af04a0cadd081321ef46c5de35968b8d627d4c1663e5f45c960afc', 'b7b7f44c03e45eebbc63e5a54ff81e196bb87d8d7a9f7e3677d55cdeba2378c0', '', NULL, 2, 'sxdvfdg');
+INSERT INTO `ea_users` (`id`, `first_name`, `last_name`, `email`, `mobile_number`, `phone_number`, `address`, `city`, `zip_code`, `state`, `address2`, `city2`, `state2`, `zip_code2`, `password`, `salt`, `notes`, `src_photo`, `id_roles`, `username`, `idfacebook`) VALUES
+(84, 'seif', 'eddine', 'jandoubiseif.cj@gmail.com', '', '+21653534003', '', '', '', '', '', '', '', '', '08d7b1442b7a4fc0b59ba53e7b77929790793aa81451a70521e36dfbe4072528', '', '', NULL, 1, 'seif', NULL),
+(85, 'John', 'Doe', 'jandoubiseif.cj@gmail.com', '', '+21653534003', '', '', '', '', '', '', '', '', '', '', '', NULL, 2, 'joe', NULL),
+(101, 'amell', 'fezai', 'fezai.amel@gmail.com', NULL, '+21653534003', '', '', '', NULL, NULL, NULL, NULL, NULL, 'ea83a9354108cbeb047394f9619ed55a319edd3e6f439a5c7e3f78fdeb68a31a', 'd0de2e8fc7fbd52c58fc0da1a75eb072ce38ee1ebf4841a2ec703e88ca24e89a', NULL, 'assets/img/default_image.jpg', 3, 'llema', NULL),
+(109, 'iuytrh', 'rhtde', 'jgytf@iuytr.gt', '', '+21653534003', '', '', '', '', NULL, NULL, NULL, NULL, '95a6ebb3c42a345feff8bd683fb6a8580d3379cedfc313eec06d439163344b62', '376f83b5f3f5451781e30e81ae08db0d0c7792f69299c2811a5c873d8a4b0fb4', '', NULL, 2, 'jytrdyerdf', NULL),
+(111, 'amal', 'amal', 'amal@amal.com', '', '+21653534003', '', '', '', '', NULL, NULL, NULL, NULL, 'c5c3588c7b94e88b51389572be5ba1446aef2bd6b423972d014e57383c354ffd', '7cd1c6c06abeb6e5f3d64cb214eb947b095934a9d98c37e5fcfeae0e7a812089', '', NULL, 4, 'amal', NULL),
+(113, 'ali', 'ali', 'jandoubiseif@gmail.com', '', '+21653534003', '', '', '', '', NULL, NULL, NULL, NULL, '732d6f33eae6bc9404dcd8d85b30dd3fc261876d26348aabf29a319ee08b0680', '446d40623b69da2460cb5927816ff0d0519d83679d00f7ab3f94dd21d4b2daa6', '', NULL, 2, 'seifaa', NULL),
+(156, 'mohsen', 'mohsen', 'jandoubiseif.if@gmail.com', NULL, '+21653534003', '', '', '', NULL, '', '', NULL, '', 'e5ccb7e2726cfa70eb0c168ff66e9a8eb6a3a18ebdb008be6adee54107854f13', 'a572106159f8c59febde5129a90c4f9a183363de728f98bd70f5020f01aca3b2', NULL, './uploads/Sans_titre.png', 3, 'moh', NULL),
+(157, 'amel', 'fezai', 'amel.fezai@live.fr', NULL, '+21653534003', 'zertyu', 'ertyu', 'erty_', NULL, '', '', NULL, '', '9a7fb858f28f18e1f63ac45c15c7bc93cca62e7a2b1e29a41529957b5425dcd1', 'b2d5e366f41b65644b667f4650fd5274958986cb4695c4162f3c45c73a7c84d2', NULL, './uploads/961579_727491730701535_909717261_n.jpg', 3, 'amellll', NULL),
+(158, '''(ty', 'defdrg', 'jandoubiscdedeeif.cj@gmail.com', NULL, '+21653534003', 'zaergthy', 'zedrfthyj', 'ezrty', NULL, NULL, NULL, NULL, NULL, 'f66c2990f8b7cd10ca1d795cf83bd90c2dbdb9a7661b6ff3e5b714d642bf30fc', '8ad7506ac09900810be6a0521fb2a74d1986d132b623601abd8370ffec38644b', NULL, 'assets/img/default_image.jpg', 3, NULL, NULL),
+(160, 'sqfdg', 'sdfgnh', 'dqsddf@dsfbg.com', '', '451356156415', '', '', '', '', NULL, NULL, NULL, NULL, '20a486eab7af04a0cadd081321ef46c5de35968b8d627d4c1663e5f45c960afc', 'b7b7f44c03e45eebbc63e5a54ff81e196bb87d8d7a9f7e3677d55cdeba2378c0', '', NULL, 2, 'sxdvfdg', NULL);
 
 -- --------------------------------------------------------
 
@@ -325,9 +295,7 @@ INSERT INTO `ea_user_settings` (`id_users`, `working_plan`, `notifications`, `go
 (85, '{"monday":{"start":"09:00","end":"18:00","breaks":[{"start":"14:30","end":"15:00"}]},"tuesday":{"start":"09:00","end":"18:00","breaks":[{"start":"14:30","end":"15:00"}]},"wednesday":{"start":"09:00","end":"18:00","breaks":[{"start":"14:30","end":"15:00"}]},"thursday":{"start":"09:00","end":"18:00","breaks":[{"start":"14:30","end":"15:00"}]},"friday":{"start":"09:00","end":"18:00","breaks":[{"start":"14:30","end":"15:00"}]},"saturday":null,"sunday":null}', 1, 0, NULL, 'jandoubiseif.cj@gmail.com', 5, 5),
 (109, '{"monday":{"start":"09:00","end":"18:00","breaks":[{"start":"14:30","end":"15:00"}]},"tuesday":{"start":"09:00","end":"18:00","breaks":[{"start":"14:30","end":"15:00"}]},"wednesday":{"start":"09:00","end":"18:00","breaks":[{"start":"14:30","end":"15:00"}]},"thursday":{"start":"09:00","end":"18:00","breaks":[{"start":"14:30","end":"15:00"}]},"friday":{"start":"09:00","end":"18:00","breaks":[{"start":"14:30","end":"15:00"}]},"saturday":{"start":"09:00","end":"18:00","breaks":[]},"sunday":{"start":"09:00","end":"18:00","breaks":[]}}', 1, 0, NULL, NULL, 5, 5),
 (111, NULL, 1, 0, NULL, NULL, 5, 5),
-(112, NULL, 0, 0, NULL, NULL, 5, 5),
 (113, '{"monday":{"start":"09:00","end":"18:00","breaks":[{"start":"14:30","end":"15:00"}]},"tuesday":{"start":"09:00","end":"18:00","breaks":[{"start":"14:30","end":"15:00"}]},"wednesday":{"start":"09:00","end":"18:00","breaks":[{"start":"14:30","end":"15:00"}]},"thursday":{"start":"09:00","end":"18:00","breaks":[{"start":"14:30","end":"15:00"}]},"friday":{"start":"09:00","end":"18:00","breaks":[{"start":"14:30","end":"15:00"}]},"saturday":{"start":"09:00","end":"18:00","breaks":[]},"sunday":{"start":"09:00","end":"18:00","breaks":[]}}', 1, 0, NULL, 'jandoubiseif.if@gmail.com', 5, 5),
-(159, NULL, 0, 0, NULL, NULL, 5, 5),
 (160, '{"monday":{"start":"09:00","end":"18:00","breaks":[{"start":"11:20","end":"11:30"},{"start":"14:30","end":"15:00"}]},"tuesday":{"start":"09:00","end":"18:00","breaks":[{"start":"11:20","end":"11:30"},{"start":"14:30","end":"15:00"}]},"wednesday":{"start":"09:00","end":"18:00","breaks":[{"start":"11:20","end":"11:30"},{"start":"14:30","end":"15:00"}]},"thursday":{"start":"09:00","end":"18:00","breaks":[{"start":"11:20","end":"11:30"},{"start":"14:30","end":"15:00"}]},"friday":{"start":"09:00","end":"18:00","breaks":[{"start":"11:20","end":"11:30"},{"start":"14:30","end":"15:00"}]},"saturday":{"start":"09:00","end":"18:00","breaks":[{"start":"11:20","end":"11:30"},{"start":"14:30","end":"15:00"}]},"sunday":{"start":"09:00","end":"18:00","breaks":[{"start":"11:20","end":"11:30"},{"start":"14:30","end":"15:00"}]}}', 0, 0, NULL, NULL, 5, 5);
 
 -- --------------------------------------------------------
@@ -381,7 +349,11 @@ INSERT INTO `ea_waiting` (`id`, `book_datetime`, `start_datetime`, `end_datetime
 (42, '2016-03-22 14:18:44', '2016-03-22 15:20:00', '2016-03-22 15:50:00', NULL, 85, 156, 13, '5d0426989960040a98861c7794ff9f2e', NULL),
 (43, '2016-03-22 14:19:51', '2016-03-22 14:00:00', '2016-03-22 14:30:00', NULL, 85, 156, 13, '91d2972aed9891838025c11206e21cad', NULL),
 (44, '2016-03-22 14:20:15', '2016-03-22 14:00:00', '2016-03-22 14:40:00', NULL, 85, 156, 14, '09993aefe6a71f4d7d0e9bf63b64bb0d', NULL),
-(45, '2016-03-22 17:15:25', '2016-03-25 12:05:00', '2016-03-25 14:05:00', NULL, 85, 156, 15, 'db9062639c8cab81bce20fd68ce5bfcc', NULL);
+(45, '2016-03-22 17:15:25', '2016-03-25 12:05:00', '2016-03-25 14:05:00', NULL, 85, 156, 15, 'db9062639c8cab81bce20fd68ce5bfcc', NULL),
+(46, '2016-03-22 22:51:58', '2016-03-22 22:02:00', '2016-03-22 22:42:00', NULL, 85, 156, 14, 'e3d463973d1e9038d23323b2e73391b8', NULL),
+(47, '2016-03-22 22:53:04', '2016-03-22 03:33:00', '2016-03-22 04:13:00', NULL, 85, 156, 14, '3d50cf4e403324d1cc79dc37a0057ef3', NULL),
+(48, '2016-03-23 10:46:39', '2016-03-23 14:00:00', '2016-03-23 14:40:00', NULL, 85, 156, 14, '4d880a2dc0502f41229bb044e75ab62e', NULL),
+(49, '2016-03-23 10:46:39', '2016-03-23 14:00:00', '2016-03-23 14:40:00', NULL, 85, 156, 14, '4d880a2dc0502f41229bb044e75ab62e', NULL);
 
 --
 -- Index pour les tables exportées
@@ -479,7 +451,7 @@ ALTER TABLE `ea_appointments`
 -- AUTO_INCREMENT pour la table `ea_notifications`
 --
 ALTER TABLE `ea_notifications`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT pour la table `ea_roles`
 --
@@ -504,12 +476,12 @@ ALTER TABLE `ea_settings`
 -- AUTO_INCREMENT pour la table `ea_users`
 --
 ALTER TABLE `ea_users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=161;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=162;
 --
 -- AUTO_INCREMENT pour la table `ea_waiting`
 --
 ALTER TABLE `ea_waiting`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
 --
 -- Contraintes pour les tables exportées
 --

@@ -26,7 +26,7 @@ class Config {
     // General Settings
     // ------------------------------------------------------------------------
     //const BASE_URL      = 'http://192.168.1.4';
-	const BASE_URL      = 'http://www.mesrendezvous.tn/';
+	const BASE_URL      = 'http://localhost/mcube/';
     const DEBUG_MODE    = FALSE;
      
     // ------------------------------------------------------------------------

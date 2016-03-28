@@ -45,6 +45,7 @@ body .ui-dialog {
     z-index: 2000;
     border: none !important;
     box-shadow: 0 0 10px #333;
+    background: #fff !important;
 }
 
 body .ui-dialog .ui-dialog-buttonpane {
