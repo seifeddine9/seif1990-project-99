@@ -299,7 +299,8 @@
                 </div>
 
             </div>
-            <div class="modal-footer footer">
+            <hr>
+            <div class="azerty text-right" style="margin-top: 50px;">
                 <button id="save-appointment" class="btn btn-primary">
                     <?php echo $this->lang->line('save'); ?>
                 </button>

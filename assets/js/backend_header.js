@@ -155,6 +155,8 @@ HeaderHelper.prototype.getFilterHtmlheadernotifications = function (notification
     var today = new Date();//.toString('yyyy-MM-dd hh:mm:ss');
     var action = new Date(notification_list.date_action);//.toString('yyyy-MM-dd hh:mm:ss');
     //var time = parseInt((today - action) / (1000 * 60 * 60 * 24));
+    console.log('today',today);
+    console.log('action',action);
     var passed=0; 
     if (parseInt((today - action) / (1000)) >= 1 && parseInt((today - action) / (1000*60)) < 1)
     {   

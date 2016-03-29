@@ -84,17 +84,19 @@ var FrontendBook = {
              newDateEnd = newDateEnd +" "+ heureEnd;
              newDateEnd= new Date(newDateEnd);// dateEnd*/
 
-            var startDate = moment(start, 'DD/MM/YYYY').format("DD MMM YYYY")
+            var startDate = moment(start, 'DD/MM/YYYY').format("DD MMM YYYY");
             var now = moment();
             var tout = '<tr  data-target="#modal-info-appointment" data-id="' + appointment.id + '">' +
                     '<td><span class="dateDebut" ><i class="fa fa-clock-o  fa-2x" style="color: #68c39f"></i><strong>&nbsp;&nbsp;' + startDate + '</strong><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: 1.2em;  color:#686868">&nbsp;&nbsp;&nbsp;&nbsp;à&nbsp;' + heureStart + 'H</span></span></td>' +
                     '<td><strong ">' + appointment.service.name + '</strong><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span   style="color:#686868">Pour &nbsp;' + appointment.service.price + ' ' + appointment.service.currency + '</span></td>' +
+                    '<td><span><i class="fa fa-calendar-check-o  fa-2x" style="color: #68c39f"></i>&nbsp;&nbsp;Etat du rendez-vous </span><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>'+appointment.etat+'</strong></td>'+
                     '</tr>';
             if (moment(newDateStart).isSameOrAfter(now))
             {
                 var future = '<tr  data-target="#modal-info-appointment" data-id="' + appointment.id + '">' +
                         '<td><span class="dateDebut" ><i class="fa fa-clock-o  fa-2x" style="color: #68c39f"></i><strong>&nbsp;&nbsp;' + startDate + '</strong><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: 1.2em;  color:#686868">&nbsp;&nbsp;&nbsp;&nbsp;à&nbsp;' + heureStart + 'H</span></span></td>' +
                         '<td><strong ">' + appointment.service.name + '</strong><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span   style="color:#686868">Pour &nbsp;' + appointment.service.price + ' ' + appointment.service.currency + '</span></td>' +
+                        '<td><span><i class="fa fa-calendar-check-o  fa-2x" style="color: #68c39f"></i>&nbsp;&nbsp;Etat du rendez-vous </span><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>'+appointment.etat+'</strong></td>'+
                         '</tr>';
             }
 
@@ -104,6 +106,7 @@ var FrontendBook = {
                 var past = '<tr  data-target="#modal-info-appointment" data-id="' + appointment.id + '">' +
                         '<td><span class="dateDebut" ><i class="fa fa-clock-o  fa-2x" style="color: #68c39f"></i><strong>&nbsp;&nbsp;' + startDate + '</strong><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: 1.2em;  color:#686868">&nbsp;&nbsp;&nbsp;&nbsp;à&nbsp;' + heureStart + 'H</span></span></td>' +
                         '<td><strong ">' + appointment.service.name + '</strong><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span   style="color:#686868">Pour &nbsp;' + appointment.service.price + ' ' + appointment.service.currency + '</span></td>'+
+                        '<td><span><i class="fa fa-calendar-check-o  fa-2x" style="color: #68c39f"></i>&nbsp;&nbsp;Etat du rendez-vous </span><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>'+appointment.etat+'</strong></td>'+
                         '</tr>';
             }
 

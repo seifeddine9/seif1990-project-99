@@ -69,6 +69,7 @@ var BackendCalendar = {
             'firstDay': 1, // Monday
             'slotMinutes': 30,
             'snapMinutes': 15,
+            
             'axisFormat': 'HH:mm',
             'timeFormat': 'HH:mm{ - HH:mm}',
             'allDayText': EALang['all_day'],
@@ -1058,17 +1059,42 @@ var BackendCalendar = {
             var $calendar = $('#calendar');
 
             $.each(response.appointments, function (index, appointment) {
+                
+                if(appointment['etat']==='confirmé')
+                {
                 var event = {
                     'id': appointment['id'],
                     'title': appointment['service']['name'] + ' - '
                             + appointment['customer']['first_name'] + ' '
-                            + appointment['customer']['last_name'],
+                            + appointment['customer']['last_name'] + ' ',
+                            
+                    'start': appointment['start_datetime'],
+                    'end': appointment['end_datetime'],
+                    'allDay': false,                   
+                    'data': appointment // Store appointment data for later use.
+                    
+                };
+            }else{
+                var event = {
+                    'id': appointment['id'],
+                    'title': appointment['service']['name'] + ' - '
+                            + appointment['customer']['first_name'] + ' '
+                            + appointment['customer']['last_name'] + ' ',
+                            
                     'start': appointment['start_datetime'],
                     'end': appointment['end_datetime'],
                     'allDay': false,
+                    'color':'#23b08a',
                     'data': appointment // Store appointment data for later use.
+                    
                 };
-
+                
+            }
+                
+                
+                
+                //'eventColor': 'red',
+                //event.eventColor('#fff');
                 calendarEvents.push(event);
             });
 

@@ -49,28 +49,31 @@ var BackendSettings = {
 
         var workingPlan = {};
         $.each(GlobalVariables.settings.system, function (index, setting) {
-            if (setting.name == 'company_working_plan') {
+            if (setting.name === 'company_working_plan') {
                 workingPlan = $.parseJSON(setting.value);
             }
 
-            if (setting.name == 'customer_notifications' && setting.value == '1') {
+            if (setting.name === 'customer_notifications' && setting.value === '1') {
                 $('#customer-notifications').addClass('active');
             }
 
-            if (setting.name == 'require_captcha' && setting.value == '1') {
+            if (setting.name === 'require_captcha' && setting.value === '1') {
                 $('#require-captcha').addClass('active');
             }
-            if (setting.name == 'enable_double' && setting.value == '1') {
+            if (setting.name === 'enable_double' && setting.value ==='1') {
                 $('#enable-double').addClass('active');
             }
-            if (setting.name == 'enable_google' && setting.value == '1') {
+            if (setting.name === 'enable_google' && setting.value === '1') {
                 $('#enable-google').addClass('active');
             }
-            if (setting.name == 'sms_notification' && setting.value == '1') {
+            if (setting.name ==='sms_notification' && setting.value === '1') {
                 $('#sms-notification').addClass('active');
             }
-            if (setting.name == 'show_provider' && setting.value == '1') {
+            if (setting.name === 'show_provider' && setting.value === '1') {
                 $('#show-provider').addClass('active');
+            }
+            if (setting.name === 'confirm_appointment' && setting.value === '1') {
+                $('#confirm-appointment').addClass('active');
             }
         });
 
@@ -334,6 +337,10 @@ SystemSettings.prototype.get = function () {
     settings.push({
         'name': 'show_provider',
         'value': $('#show-provider').hasClass('active') === true ? '1' : '0'
+    });
+    settings.push({
+        'name': 'confirm_appointment',
+        'value': $('#confirm-appointment').hasClass('active') === true ? '1' : '0'
     });
 
     // Business Logic Tab

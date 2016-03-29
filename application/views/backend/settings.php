@@ -103,7 +103,7 @@ src="<?php echo $base_url; ?>/assets/ext/jquery-jeditable/jquery.jeditable.min.j
                         </div>
                         <div class="form-group">
                             <label for="company-service"><?php echo 'Nombre de services par plage horaire'; ?> *</label>
-                            <input type="number" id="company-service" data-field="company_service" class="required form-control" min="0" max="1">
+                            <input type="number" id="company-service" data-field="company_service" class="required form-control" min="1" max="1">
                             <span class="help-block">
                                 <?php echo 'Nombre de services par plage horaire'; ?>
                             </span>
@@ -119,6 +119,13 @@ src="<?php echo $base_url; ?>/assets/ext/jquery-jeditable/jquery.jeditable.min.j
                             </label>				
                             <button type="button" id="enable-google" class="btn btn-default" data-toggle="button" aria-pressed="false">
                                 <span class="glyphicon glyphicon-cog"></span> Permettre google synchronize</button>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirm-appointment">
+                                Confirmer les rendez-vous automatiquement
+                            </label>				
+                            <button type="button" id="confirm-appointment" class="btn btn-default" data-toggle="button" aria-pressed="false">
+                                <span class="glyphicon glyphicon-calendar"></span> Activez la confirmation automatique</button>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -178,7 +185,7 @@ src="<?php echo $base_url; ?>/assets/ext/jquery-jeditable/jquery.jeditable.min.j
                         <div class="form-group">
                             <label for="sms-notification">
                                 Envoyer des notifications sms
-                            </label>				
+                            </label><br>				
                             <button type="button" id="sms-notification" class="btn btn-default" data-toggle="button" aria-pressed="false">
                                 <span class="glyphicon glyphicon-phone"></span> Activer les notifications sms</button>
                         </div>

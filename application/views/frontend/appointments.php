@@ -131,7 +131,7 @@
 <style type="text/css">
     
 
-    @media (max-width: 380px){}
+    @media (max-width: 380px){
 #book-appointment-wizard #wizard-frame-2 .frame-container .frame-content {
     margin-left: 0% !important;
 }}
@@ -274,7 +274,7 @@
                             <div id= "future-appointments" class="display ">
 
                                 <table id="list-future-appointments" class="table table-striped  " cellspacing="0" >
-                                    <thead><tr><th>Service</th><th>Prestation</th></tr>
+                                    <thead><tr><th>Service</th><th>Prestation</th><th>Etat</th></tr>
                                     </thead><tbody></tbody>
                                      </table>
 
@@ -282,14 +282,14 @@
 
                             <div id= "all-appointments" class="display ">
                                 <table id="list-appointments" class="table table-striped " cellspacing="0" >
-                                    <thead><tr><th>Service</th><th>Prestation</th></tr>
+                                    <thead><tr><th>Service</th><th>Prestation</th><th>Etat</th></tr>
                                     </thead><tbody></tbody> </table>
 
                             </div>
 
                             <div id= "past-appointments" class="display ">
                                 <table id="list-past-appointments" class="table table-striped  " cellspacing="0" >
-                                    <thead><tr><th>Service</th><th>Prestation</th></tr>
+                                    <thead><tr><th>Service</th><th>Prestation</th><th>Etat</th></tr>
                                     </thead><tbody></tbody> </table>
 
                             </div>

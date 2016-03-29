@@ -822,7 +822,8 @@ body .form-horizontal .controls {
 #settings-page #enable-double,
 #settings-page #enable-google,
 #settings-page #show-provider,
-#settings-page #sms-notification{
+#settings-page #sms-notification,
+#settings-page #confirm-appointment{
     outline: none;
 }
 
@@ -832,7 +833,8 @@ body .form-horizontal .controls {
 #settings-page #require-captcha.active,
 #settings-page #enable-google.active,
 #settings-page #show-provider.active,
-#settings-page #sms-notification.active{
+#settings-page #sms-notification.active,
+#settings-page #confirm-appointment.active{
     background: #B6DCFF;
 }
 

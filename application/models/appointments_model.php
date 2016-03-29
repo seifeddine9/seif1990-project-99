@@ -550,33 +550,41 @@ class Appointments_Model extends CI_Model {
          * */
         if (!isset($appointment['id'])) {
             $querry = 'SELECT * from ea_appointments WHERE start_datetime >"' . $appointment['start_datetime'] . '" AND ' .
-                    'end_datetime >"' . $appointment['end_datetime'] . '" AND ' .
+                    'end_datetime >="' . $appointment['end_datetime'] . '" AND ' .
                     'start_datetime <"' . $appointment['end_datetime'] . '" OR ' .
-                    'start_datetime <"' . $appointment['start_datetime'] . '" AND ' .
-                    'end_datetime <"' . $appointment['end_datetime'] . '" AND ' .
+                    'start_datetime <="' . $appointment['start_datetime'] . '" AND ' .
+                    'end_datetime <="' . $appointment['end_datetime'] . '" AND ' .
                     'end_datetime >"' . $appointment['start_datetime'] . '" OR ' .
-                    'start_datetime <"' . $appointment['start_datetime'] . '" AND ' .
-                    'end_datetime >"' . $appointment['end_datetime'] . '" OR ' .
-                    'start_datetime >"' . $appointment['start_datetime'] . '" AND ' .
-                    'end_datetime <"' . $appointment['end_datetime'] . '"';
+                    'start_datetime <="' . $appointment['start_datetime'] . '" AND ' .
+                    'end_datetime >="' . $appointment['end_datetime'] . '" OR ' .
+                    'start_datetime >="' . $appointment['start_datetime'] . '" AND ' .
+                    'end_datetime <="' . $appointment['end_datetime'] . '"';
         } else {
             $querry = 'SELECT * from ea_appointments WHERE id <>"' . $appointment['id'] . '" AND (' .
-                    'start_datetime >"' . $appointment['start_datetime'] . '" AND ' .
-                    'end_datetime >"' . $appointment['end_datetime'] . '" AND ' .
+                    'start_datetime >="' . $appointment['start_datetime'] . '" AND ' .
+                    'end_datetime >="' . $appointment['end_datetime'] . '" AND ' .
                     'start_datetime <"' . $appointment['end_datetime'] . '" OR ' .
-                    'start_datetime <"' . $appointment['start_datetime'] . '" AND ' .
-                    'end_datetime <"' . $appointment['end_datetime'] . '" AND ' .
+                    'start_datetime <="' . $appointment['start_datetime'] . '" AND ' .
+                    'end_datetime <="' . $appointment['end_datetime'] . '" AND ' .
                     'end_datetime >"' . $appointment['start_datetime'] . '" OR ' .
-                    'start_datetime <"' . $appointment['start_datetime'] . '" AND ' .
-                    'end_datetime >"' . $appointment['end_datetime'] . '" OR ' .
-                    'start_datetime >"' . $appointment['start_datetime'] . '" AND ' .
-                    'end_datetime <"' . $appointment['end_datetime'] . '")';
+                    'start_datetime <="' . $appointment['start_datetime'] . '" AND ' .
+                    'end_datetime >="' . $appointment['end_datetime'] . '" OR ' .
+                    'start_datetime >="' . $appointment['start_datetime'] . '" AND ' .
+                    'end_datetime <="' . $appointment['end_datetime'] . '")';
         }
 
 
         $querry_rows = $this->db->query($querry);
         $num_rows = $querry_rows->num_rows();
         return $num_rows;
+    }
+    
+    public function confirmer($appointment) {
+        $this->db->where('id', $appointment['id']);
+		$appointment['etat']='confirmer';
+        if (!$this->db->update('ea_appointments', $appointment)) {
+            throw new Exception('Could not update waiting_appointment record.');
+        }
     }
 
 }

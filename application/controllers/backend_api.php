@@ -162,7 +162,7 @@ class Backend_api extends CI_Controller {
                     if (!isset($appointment['id_users_customer'])) {
                         $appointment['id_users_customer'] = $customer['id'];
                     }
-
+                    $appointment['etat']='confirmé';
                     $appointment['id'] = $this->appointments_model->add($appointment);
                 }
 
@@ -684,7 +684,54 @@ class Backend_api extends CI_Controller {
             ));
         }
     }
+    
+    /**
+     * [AJAX] Delete waiting from the database.
+     *
+     * This method deletes an existing waiting from the database. Once this
+     * action is finished it cannot be undone. Notification emails are send to both
+     * provider and customer and the delete action is executed to the Google Calendar
+     * account of the provider, if the "google_sync" setting is enabled.
+     *
+     * @param int $_POST['waiting_id'] The waiting id to be deleted.
+     */
+    public function ajax_confirm_appointment() {
+        try {
 
+
+            if (!isset($_POST['appointment_id'])) {
+                throw new Exception('No waiting id provided.');
+            }
+
+            // :: STORE waiting DATA FOR LATER USE IN THIS METHOD
+            $this->load->model('waiting_model');
+            $this->load->model('appointments_model');
+            $this->load->model('providers_model');
+            $this->load->model('customers_model');
+            $this->load->model('services_model');
+            $this->load->model('settings_model');
+
+            $appointment = $this->appointments_model->get_row($_POST['appointment_id']);
+
+            $this->appointments_model->confirmer($appointment);
+
+
+
+            if (!isset($warnings)) {
+                echo json_encode(AJAX_SUCCESS); // Everything executed successfully.
+            } else {
+                echo json_encode(array(
+                    'warnings' => $warnings // There were warnings during the operation.
+                ));
+            }
+        } catch (Exception $exc) {
+            echo json_encode(array(
+                'exceptions' => array(exceptionToJavaScript($exc))
+            ));
+        }
+    }
+    
+    
     /**
      * [AJAX] Disable a providers sync setting.
      *

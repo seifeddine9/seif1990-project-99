@@ -740,7 +740,8 @@ class home extends CI_Controller {
         $working_plan = json_decode($this->providers_model->get_setting('working_plan', $provider_id), true);
 
         $where_clause = array(
-            'id_users_provider' => $provider_id
+            'id_users_provider' => $provider_id,
+            'etat' => 'confirmé'
         );
 
         $reserved_appointments = $this->appointments_model->get_batch($where_clause);
@@ -1089,6 +1090,12 @@ class home extends CI_Controller {
             $customer_id = $customer['id'];
             $appointment['id_users_customer'] = $customer_id;
             $appointment['is_unavailable'] = (int) $appointment['is_unavailable']; // needs to be type casted
+            if ($this->settings_model->get_setting('confirm_appointment') == '0') {
+                $appointment['etat'] = 'en attente';
+            } else {
+                $appointment['etat'] = 'confirmé';
+            }
+
             $appointment['id'] = $this->appointments_model->add($appointment);
             $appointment['hash'] = $this->appointments_model->get_value('hash', $appointment['id']);
 
@@ -1169,10 +1176,18 @@ class home extends CI_Controller {
              * */
             if ($this->settings_model->get_setting('sms_notification') == '1') {
 
-                if (!$post_data['manage_mode']) {
-                    $this->send_sms($customer['phone_number'], 'Votre demande de rendez-vous a été confirmée');
-                } else {
-                    $this->send_sms($customer['phone_number'], 'Votre rendez-vous a été modifiée');
+                if ($appointment['etat'] === 'confirmé') {
+                    if (!$post_data['manage_mode']) {
+                        $this->send_sms($customer['phone_number'], 'Votre demande de rendez-vous a été confirmée');
+                    } else {
+                        $this->send_sms($customer['phone_number'], 'Votre rendez-vous a été modifiée');
+                    }
+                }else{
+                    if (!$post_data['manage_mode']) {
+                        $this->send_sms($customer['phone_number'], 'Votre demande de rendez-vous a été envoyé, veuillez attendre la confirmation');
+                    } else {
+                        $this->send_sms($customer['phone_number'], 'Votre rendez-vous a été modifiée, veuillez attendre la confirmation');
+                    }
                 }
             }
 

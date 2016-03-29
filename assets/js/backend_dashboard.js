@@ -155,6 +155,18 @@ DashboardHelper.prototype.bindEventHandlers = function () {
 
 
     });
+    $(document).on('click', '#confirm-appointment', function () {
+        var appointment_id = $(this).attr('confirm-id');
+        //alert('hello');
+
+        BackendDashboard.helper.confirmappointment(appointment_id);
+
+
+        window.location.reload();
+
+
+
+    });
 
 };
 
@@ -353,6 +365,37 @@ DashboardHelper.prototype.addbloquedwaiting = function (waiting_id) {
 
 };
 
+/**
+ * Filter customer records.
+ *
+ * @param {string} key This key string is used to filter the customer records.
+ * @param {numeric} selectId (OPTIONAL = undefined) If set then after the filter
+ * operation the record with the given id will be selected (but not displayed).
+ * @param {bool} display (OPTIONAL = false) If true then the selected record will
+ * be displayed on the form.
+ */
+DashboardHelper.prototype.confirmappointment = function (appointment_id) {
+    //if (display == undefined) display = false;
+
+    var postUrl = GlobalVariables.baseUrl + '/index.php/backend_api/ajax_confirm_appointment';
+
+    console.log('Filter appointment id:', appointment_id);
+    var postData = {
+        'csrfToken': GlobalVariables.csrfToken,
+        'appointment_id': appointment_id
+    };
+
+    $.post(postUrl, postData, function (response) {
+        ///////////////////////////////////////////////////////
+        console.log('Filter confirm:', response);
+        ///////////////////////////////////////////////////////		
+        if (!GeneralFunctions.handleAjaxExceptions(response))
+            return;
+
+    }, 'json').fail(GeneralFunctions.ajaxFailureHandler);
+
+};
+
 
 /**
  * Filter customer records.
@@ -488,6 +531,15 @@ DashboardHelper.prototype.getallappointment = function () {
                 var html = BackendDashboard.helper.getFilterHtmlAppointment(appointment_list);
                 $('#appointment_list .results').append(html);
             }
+            
+            if (appointment_list.etat === 'confirmé') {
+                    //$('#waiting_list .results [waiting-id="' + waiting_list.id + '"]').css('background', '#ff6666');
+                    $('[confirm-id="' + appointment_list.id + '"]').hide();
+                    //$('[delete-id="' + waiting_list.hash + '"]').show();
+                } else {
+                    $('[confirm-id="' + appointment_list.id + '"]').show();
+                    //$('[delete-id="' + waiting_list.hash + '"]').hide();
+                }
         });
 
         $('#appointment_list .results').jScrollPane({mouseWheelSpeed: 70});
@@ -512,6 +564,7 @@ DashboardHelper.prototype.getFilterHtmlAppointment = function (appointment_list)
             '<strong>Nom service: ' + appointment_list.service.name + '</strong><br> Nom exécutant: '
             + appointment_list.provider.first_name + ' ' + appointment_list.provider.last_name + '<br>Durée :' +
             start + ' - ' + end + '<br>' +
+            '<strong>Etat: ' + appointment_list.etat + '</strong><br>' +
             '</div><hr>' +
             '<div id="' + appointment_list.id + '" class="modal fade" role="dialog" >' +
             '<div class="modal-dialog modal-sm">' +
@@ -527,7 +580,7 @@ DashboardHelper.prototype.getFilterHtmlAppointment = function (appointment_list)
             start + ' - ' + end + '<br>' +
             '</div>' +
             '<div class="modal-footer">' +
-            '<button type="button" class="btn btn-primary">Editer</button>' +
+            '<button type="button" class="btn btn-primary" id="confirm-appointment" confirm-id="' + appointment_list.id + '">Confirmer</button>' +
             '<button type="button" class="btn btn-danger" id="supprimer-appointment" data-id="' + appointment_list.hash + '">Supprimer</button>' +
             '<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>' +
             '</div>' +
