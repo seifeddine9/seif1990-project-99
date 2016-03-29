@@ -87,8 +87,9 @@ src="<?php echo $this->config->item('base_url'); ?>assets/ext/masonry.pkgd.min.j
         FrontendService.initialize(true, GlobalVariables.manageMode);
 
     });
-  function checkLoginState() {
-              FB.getLoginStatus(function(response) {
+  checkLoginState = function () {
+
+              FB.login(function(response) {
 
                     if (response.status === 'connected') {
       // Logged into your app and Facebook.
@@ -182,9 +183,9 @@ if(data =='AJAX_FAILURE')
 
 
          
-      }); }  });   }
+  
 
- 
+       }); }  }, {scope: 'email,public_profile', return_scopes: true});   }
 </script>
 
 
@@ -484,13 +485,15 @@ if(data =='AJAX_FAILURE')
 
 
                                     </form>
-                              <br/><br/>     <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">Connexion avec Facebook
-</fb:login-button>
+                              <br/><br/>     <button  style="font-size: 13px" class="btn btn-block btn-social btn-facebook" onclick="checkLoginState();">
+    <span class="fa fa-facebook"></span> Connexion avec Facebook
+  </button>
                                 </div>
                                 <div class="col-sm-6"><h3>Pas encore membre?</h3>
                                     <p>Inscrivez- vous maintenant</p>
                                     <p class="text-center">
-                                        <span class="sign-up"><i class="fa fa-sign-in big-icon"></i></span>
+                                        <span class="sign-up  "><i class="fa fa-sign-in fa-5x hidden-md  hidden-sm  hidden-lg visible-xs " style="color: #e5e6e7;"></i><i class="fa fa-sign-in visible-md visible-lg visible-sm hidden-xs  big-icon "></i></span>
+                                        
                                     </p>
                                 </div>
 

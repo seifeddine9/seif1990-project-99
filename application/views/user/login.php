@@ -19,7 +19,7 @@
         src="<?php echo $this->config->item('base_url'); ?>assets/ext/intl-tel-input/intlTelInput.js"></script>  
 
 
-         <script src="http://connect.facebook.net/en_US/all.js"></script>
+         <script type="text/javascript" src="<?php echo $this->config->item('base_url'); ?>assets/ext/all.js"></script>
 
        <style>
 
@@ -71,6 +71,11 @@
 .login-wrap .btn-block {
   margin: 5px 0;
 }
+button.btn.btn-block.btn-social.btn-facebook,
+button#login {
+    width: 70%;
+    margin-left: 15%;
+}
 .login-wrap .login-input {
   position: relative;
 }
@@ -92,9 +97,7 @@ color : #53a585 !important;
 
 }
 
-.btn-facebook {
-    width: 62%!important;
-      margin-left: 17% !important;}
+
 
        </style>
               
@@ -145,7 +148,7 @@ color : #53a585 !important;
 
   checkLoginState = function () {
 
-              FB.getLoginStatus(function(response) {
+              FB.login(function(response) {
 
                     if (response.status === 'connected') {
       // Logged into your app and Facebook.
@@ -199,7 +202,7 @@ console.log(customerData);
 
 
          
-      }); }  });  
+      }); }  }, {scope: 'email,public_profile', return_scopes: true});  
 
 
        }
@@ -328,27 +331,31 @@ if(missingFields == true)
 						<i class="fa fa-key overlay"></i>
 						<input type="password" id ="password" class="form-control text-input" placeholder="<?php echo $this->lang->line('enter_password_here'); ?>" required>
 						</div>
-						 <div class="checkbox">
-          <label>
-            <input type="checkbox" value="remember-me"> <?php echo $this->lang->line('remember_me'); ?>
-          </label>
+						 <div class="ol-sm-12">
+
         </div>
-						<div class="row">
-							<div class="col-sm-6">
+						<div class="row ">
+							<div class="col-sm-12">
 							<button type="submit" id="login" class="btn btn-primary btn-block"><?php echo $this->lang->line('login'); ?></button>
 
 							</div>
-							<div class="col-sm-6">
-							<a href="<?php echo $base_url; ?>index.php/user/signup" class="btn btn-primary btn-block"><?php echo $this->lang->line('sign_up_now'); ?></a>
+         
+						</div>
+
+					</form>
+                    <button class="btn btn-block btn-social  btn-facebook" style="text-align: center" onclick="checkLoginState();">
+                <span class="fa fa-facebook"></span> Connexion avec Facebook
+         </button>
+   <br/>   
+
+
+                <div class="col-sm-6">
+              <a href="<?php echo $base_url; ?>index.php/user/signup" style='color: #23b08a;' class="signup">Nouveau utilisateur?</a>
 
               </div>
-						</div>
-           <p ><a  href="<?php echo $base_url; ?>index.php/user/forgot_password" class="forgot-password">
-                <?php echo $this->lang->line('forgot_your_password'); ?></a></p>
-					</form>
-       
-   <br/>   <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">Connexion avec Facebook
-</fb:login-button>		
+                <div class="col-sm-6">
+              <a href="<?php echo $base_url; ?>index.php/user/forgot_password" style="color:#23b08a;" class="forgot-password">Mot de passe oublié ?</a>
+         </div>
 		</div>
 
 
@@ -388,13 +395,13 @@ if(missingFields == true)
 
                                     </form>
                                 </div>
-                                                 <div class="command-buttons">
-
+                                                 <div class="command-buttons " >
+                                 <div  class="text-right">
                             <button type="button" id="buttonNext" class="btn button-next btn-primary">
                                         Suivant
                                 <span class="glyphicon glyphicon-forward"></span>
                             </button>
-
+                          </div>
                         </div>
                             </div>
 
