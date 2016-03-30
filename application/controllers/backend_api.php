@@ -162,7 +162,7 @@ class Backend_api extends CI_Controller {
                     if (!isset($appointment['id_users_customer'])) {
                         $appointment['id_users_customer'] = $customer['id'];
                     }
-                    $appointment['etat']='confirmé';
+                    $appointment['etat'] = 'confirmé';
                     $appointment['id'] = $this->appointments_model->add($appointment);
                 }
 
@@ -189,15 +189,15 @@ class Backend_api extends CI_Controller {
                     $notifications['type'] = 'rendez-vous modifié';
                 }
                 $notifications['id'] = $this->notifications_model->insert($notifications);
-                
-                // :: Send sms notification
-                
-                if (!$manage_mode) {
-                    $this->send_sms($customer['phone_number'], 'Votre demande de rendez-vous a été confirmée');
-                } else {
-                    $this->send_sms($customer['phone_number'], 'Votre rendez-vous a été modifiée');
-                }
 
+                // :: Send sms notification
+                if ($this->settings_model->get_setting('sms_notification') == '1') {
+                    if (!$manage_mode) {
+                        $this->send_sms($customer['phone_number'], 'Votre demande de rendez-vous a été confirmée');
+                    } else {
+                        $this->send_sms($customer['phone_number'], 'Votre rendez-vous a été modifiée');
+                    }
+                }
                 // :: SYNC APPOINTMENT CHANGES WITH GOOGLE CALENDAR
                 try {
                     $google_sync = $this->providers_model->get_setting('google_sync', $appointment['id_users_provider']);
@@ -479,9 +479,9 @@ class Backend_api extends CI_Controller {
             $notifications['message_action'] = 'le client ' . $customer['first_name'] . ' a supprimer un rendez-vous le ' . $appointment['book_datetime'] . ' pour le service ' . $service['name'];
             $notifications['type'] = 'rendez-vous supprimé';
             $notifications['id'] = $this->notifications_model->insert($notifications);
-            
+
             // :: SEND SMS NOTIFICATION
-            
+
             if ($this->settings_model->get_setting('sms_notification') == '1') {
                 $this->send_sms($customer['phone_number'], 'Votre rendez-vous a été annulé');
             }
@@ -684,7 +684,7 @@ class Backend_api extends CI_Controller {
             ));
         }
     }
-    
+
     /**
      * [AJAX] Delete waiting from the database.
      *
@@ -712,11 +712,49 @@ class Backend_api extends CI_Controller {
             $this->load->model('settings_model');
 
             $appointment = $this->appointments_model->get_row($_POST['appointment_id']);
+            $provider = $this->providers_model->get_row($appointment['id_users_provider']);
+            $customer = $this->customers_model->get_row($appointment['id_users_customer']);
+            $service = $this->services_model->get_row($appointment['id_services']);
 
             $this->appointments_model->confirmer($appointment);
+            //Send sms notifications
+            if ($this->settings_model->get_setting('sms_notification') == '1') {
+                $this->send_sms($customer['phone_number'], 'Votre demande de rendez-vous a été confirmée');
+            }
+            
+            // :: SEND EMAIL NOTIFICATIONS TO PROVIDER AND CUSTOMER
+                try {
+                    $this->load->library('Notifications');
 
+                    $send_provider = $this->providers_model
+                            ->get_setting('notifications', $provider['id']);
 
+                    
+                        $customer_title = $this->lang->line('appointment_booked');
+                        $customer_message = $this->lang->line('thank_you_for_appointment');
+                        $customer_link = $this->config->item('base_url') . '/index.php/appointments/index/'
+                                . $appointment['hash'];
 
+                        $provider_title = $this->lang->line('appointment_added_to_your_plan');
+                        $provider_message = $this->lang->line('appointment_link_description');
+                        $provider_link = $this->config->item('base_url') . '/index.php/backend/index/'
+                                . $appointment['hash'];
+                    
+
+                    $send_customer = $this->settings_model->get_setting('customer_notifications');
+
+                    if ((bool) $send_customer === TRUE) {
+                        $this->notifications->send_appointment_details($appointment, $provider, $service, $customer, $company_settings, $customer_title, $customer_message, $customer_link, $customer['email']);
+                    }
+
+                    if ($send_provider == TRUE) {
+                        $this->notifications->send_appointment_details($appointment, $provider, $service, $customer, $company_settings, $provider_title, $provider_message, $provider_link, $provider['email']);
+                    }
+                } catch (Exception $exc) {
+                    $warnings[] = exceptionToJavaScript($exc);
+                }
+            
+            
             if (!isset($warnings)) {
                 echo json_encode(AJAX_SUCCESS); // Everything executed successfully.
             } else {
@@ -730,8 +768,7 @@ class Backend_api extends CI_Controller {
             ));
         }
     }
-    
-    
+
     /**
      * [AJAX] Disable a providers sync setting.
      *
@@ -1086,11 +1123,20 @@ class Backend_api extends CI_Controller {
             $this->load->model('providers_model');
             $this->load->model('customers_model');
 
+            $where = '';
+            if (isset($_POST['dates'])) {
+                $dates = json_decode($_POST['dates'], true);
+                $date_debut = $dates['date_debut'];
+                $date_fin = $dates['date_fin'];
+                $where = ' start_datetime between ' . $date_debut . ' AND ' . $date_fin . ' ';
+                $waiting_list = $this->waiting_model->get_batch_filter($date_debut, $date_fin);
+            } else {
+                $waiting_list = $this->waiting_model->get_batch();
+            }
 
 
 
 
-            $waiting_list = $this->waiting_model->get_batch();
 
 
             foreach ($waiting_list as &$waiting_lists) {
@@ -1132,10 +1178,19 @@ class Backend_api extends CI_Controller {
             $this->load->model('customers_model');
 
 
+            $where = '';
+            if (isset($_POST['dates'])) {
+                $dates = json_decode($_POST['dates'], true);
+                $date_debut = $dates['date_debut'];
+                $date_fin = $dates['date_fin'];
+                $where = ' start_datetime between ' . $date_debut . ' AND ' . $date_fin . ' ';
+                $appointment_list = $this->appointments_model->get_batch_filter($date_debut, $date_fin);
+            } else {
+                $appointment_list = $this->appointments_model->get_batch();
+            }
 
 
 
-            $appointment_list = $this->appointments_model->get_batch();
 
 
             foreach ($appointment_list as &$appointment_lists) {
@@ -1783,7 +1838,7 @@ class Backend_api extends CI_Controller {
             ));
         }
     }
-    
+
     public function send_sms($number, $msg) {
         $account_sid = 'AC6d404c29766c9fb0a78ef68e3c44a943';
         $auth_token = 'e808b72821d3577d36b5c7727035b02e';

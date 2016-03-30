@@ -510,6 +510,63 @@ var BackendCalendar = {
                 }, 'json').fail(GeneralFunctions.ajaxFailureHandler);
             }
         });
+        
+        
+        
+        /**
+         * Event: Popover Delete Button "Click"
+         *
+         * Displays a prompt on whether the user wants the appoinmtent to be
+         * deleted. If he confirms the deletion then an ajax call is made to
+         * the server and deletes the appointment from the database.
+         */
+        $(document).on('click', '.confirm-popover', function () {
+            $(this).parents().eq(2).remove(); // Hide the popover
+
+            
+                
+                    var postUrl = GlobalVariables.baseUrl + '/index.php/backend_api/ajax_confirm_appointment';
+
+                    var postData = {
+                        'csrfToken': GlobalVariables.csrfToken,
+                        'appointment_id': BackendCalendar.lastFocusedEventData.data['id']
+                    };
+
+                    $.post(postUrl, postData, function (response) {
+                        /////////////////////////////////////////////////////////
+                        console.log('Delete Appointment Response :', response);
+                        /////////////////////////////////////////////////////////
+
+                        $('#message_box').dialog('close');
+
+                        if (response.exceptions) {
+                            response.exceptions = GeneralFunctions.parseExceptions(response.exceptions);
+                            GeneralFunctions.displayMessageBox(GeneralFunctions.EXCEPTIONS_TITLE, GeneralFunctions.EXCEPTIONS_MESSAGE);
+                            $('#message_box').append(GeneralFunctions.exceptionsToHtml(response.exceptions));
+                            return;
+                        }
+
+                        if (response.warnings) {
+                            response.warnings = GeneralFunctions.parseExceptions(response.warnings);
+                            GeneralFunctions.displayMessageBox(GeneralFunctions.WARNINGS_TITLE, GeneralFunctions.WARNINGS_MESSAGE);
+                            $('#message_box').append(GeneralFunctions.exceptionsToHtml(response.warnings));
+                        }
+
+                        // Refresh calendar event items.
+                        $('#select-filter-item').trigger('change');
+                    }, 'json').fail(GeneralFunctions.ajaxFailureHandler);
+               
+
+                messageButtons[EALang['cancel']] = function () {
+                    $('#message_box').dialog('close');
+                };
+
+                GeneralFunctions.displayMessageBox(EALang['delete_appointment_title'],
+                        EALang['write_appointment_removal_reason'], messageButtons);
+                $('#message_box').append('<textarea id="delete-reason" rows="3"></textarea>');
+                $('#delete-reason').css('width', '100%');
+           
+        });
 
         /**
          * Event: Manage Appointments Dialog Cancel Button "Click"
@@ -1074,7 +1131,7 @@ var BackendCalendar = {
                     'data': appointment // Store appointment data for later use.
                     
                 };
-            }else{
+            }else if(appointment['etat']==='en attente'){
                 var event = {
                     'id': appointment['id'],
                     'title': appointment['service']['name'] + ' - '
@@ -1089,6 +1146,20 @@ var BackendCalendar = {
                     
                 };
                 
+            }else{
+                var event = {
+                    'id': appointment['id'],
+                    'title': appointment['service']['name'] + ' - '
+                            + appointment['customer']['first_name'] + ' '
+                            + appointment['customer']['last_name'] + ' ',
+                            
+                    'start': appointment['start_datetime'],
+                    'end': appointment['end_datetime'],
+                    'allDay': false,
+                    'color':'#FF0033',
+                    'data': appointment // Store appointment data for later use.
+                    
+                };
             }
                 
                 
@@ -1580,7 +1651,7 @@ var BackendCalendar = {
     calendarEventClick: function (event, jsEvent, view) {
         $('.popover').remove(); // Close all open popovers.
 
-        var html, displayEdit, displayDelete;
+        var html, displayEdit, displayDelete, displayConfirm;
 
         // Depending where the user clicked the event (title or empty space) we
         // need to use different selectors to reach the parent element.
@@ -1594,7 +1665,7 @@ var BackendCalendar = {
             displayDelete = (($parent.hasClass('fc-custom') || $altParent.hasClass('fc-custom'))
                     && GlobalVariables.user.privileges.appointments.delete == true)
                     ? '' : 'hide'; // Same value at the time.
-
+             
             var notes = '';
             if (event.data) { // Only custom unavailable periods have notes.
                 notes = '<strong>Notes</strong> ' + event.data.notes;
@@ -1614,6 +1685,7 @@ var BackendCalendar = {
                     + notes
                     + '<hr>' +
                     '<center>' +
+                    
                     '<button class="edit-popover btn btn-primary ' + displayEdit + '">' + EALang['edit'] + '</button>' +
                     '<button class="delete-popover btn btn-danger ' + displayDelete + '">' + EALang['delete'] + '</button>' +
                     '<button class="close-popover btn btn-default" data-po=' + jsEvent.target + '>' + EALang['close'] + '</button>' +
@@ -1623,6 +1695,14 @@ var BackendCalendar = {
                     ? '' : 'hide';
             displayDelete = (GlobalVariables.user.privileges.appointments.delete == true)
                     ? '' : 'hide';
+                    
+                    if(event.data['etat'] === 'en attente'){
+                        displayConfirm = '';
+                        displayEdit ='hide';
+                    }else{
+                        displayConfirm = 'hide';
+                        displayEdit ='';
+                    }
 
             html =
                     '<style type="text/css">'
@@ -1647,7 +1727,9 @@ var BackendCalendar = {
                     + event.data['customer']['last_name']
                     + '<hr>' +
                     '<center>' +
+                    
                     '<button class="edit-popover btn btn-primary ' + displayEdit + '">' + EALang['edit'] + '</button>' +
+                    '<button class="confirm-popover btn btn-success ' + displayConfirm + '">Confirmer</button>' +
                     '<button class="delete-popover btn btn-danger ' + displayDelete + '">' + EALang['delete'] + '</button>' +
                     '<button class="close-popover btn btn-default" data-po=' + jsEvent.target + '>' + EALang['close'] + '</button>' +
                     '</center>';

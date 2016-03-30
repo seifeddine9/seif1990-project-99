@@ -1182,7 +1182,7 @@ class home extends CI_Controller {
                     } else {
                         $this->send_sms($customer['phone_number'], 'Votre rendez-vous a été modifiée');
                     }
-                }else{
+                } else {
                     if (!$post_data['manage_mode']) {
                         $this->send_sms($customer['phone_number'], 'Votre demande de rendez-vous a été envoyé, veuillez attendre la confirmation');
                     } else {
@@ -1224,10 +1224,19 @@ class home extends CI_Controller {
                 $send_customer = $this->settings_model->get_setting('customer_notifications');
 
                 if ((bool) $send_customer === TRUE) {
-                    $this->notifications->send_appointment_details($appointment, $provider, $service, $customer, $company_settings, $customer_title, $customer_message, $customer_link, $customer['email']);
+
+
+                    if ($appointment['etat'] === 'en attente') {
+                        $customer_title = 'Demande de rendez-vous envoyé';
+                        $customer_message = 'Votre demande de rendez-vous a été envoyé, veuillez attendre la confirmation. Trouvez ci-joint les détails de votre demande';
+                        $this->notifications->send_waiting_details($appointment, $provider, $service, $customer, $company_settings, $customer_title, $customer_message, $customer_link, $customer['email']);
+                    } else {
+                        $this->notifications->send_appointment_details($appointment, $provider, $service, $customer, $company_settings, $customer_title, $customer_message, $customer_link, $customer['email']);
+                    }
                 }
 
                 if ($send_provider == TRUE) {
+
                     $this->notifications->send_appointment_details($appointment, $provider, $service, $customer, $company_settings, $provider_title, $provider_message, $provider_link, $provider['email']);
                 }
             } catch (Exception $exc) {

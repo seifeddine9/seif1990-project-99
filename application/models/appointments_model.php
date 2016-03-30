@@ -279,8 +279,7 @@ class Appointments_Model extends CI_Model {
         ;
         return $num_rows;
     }
-    
-    
+
     /**
      * get appointment number
      * */
@@ -288,7 +287,7 @@ class Appointments_Model extends CI_Model {
         $num_rows = $this->db
                         ->select_sum('ea_services.price', 'total')
                         ->from('ea_appointments')
-                        ->join('ea_services', 'ea_services.id = ea_appointments.id_services')                       
+                        ->join('ea_services', 'ea_services.id = ea_appointments.id_services')
                         ->get()->result();
         ;
         if ($num_rows[0]->total == null) {
@@ -317,7 +316,6 @@ class Appointments_Model extends CI_Model {
             return $num_rows[0]->total;
         }
     }
-    
 
     /**
      * get filtered confirmed appointment number
@@ -392,7 +390,7 @@ class Appointments_Model extends CI_Model {
                         ->where('ea_appointments.start_datetime >', $date)
                         ->get()->result()
         ;
-       if ($num_rows[0]->total == null) {
+        if ($num_rows[0]->total == null) {
             return 0;
         } else {
             return $num_rows[0]->total;
@@ -446,6 +444,23 @@ class Appointments_Model extends CI_Model {
             $this->db->where($where_clause);
         }
         $this->db->order_by('start_datetime', 'desc');
+        return $this->db->get('ea_appointments')->result_array();
+    }
+
+    /**
+     * Get all, or specific records from appointment's table.
+     *
+     * @example $this->Model->getBatch('id = ' . $recordId);
+     *
+     * @param string $where_clause (OPTIONAL) The WHERE clause of
+     * the query to be executed. DO NOT INCLUDE 'WHERE' KEYWORD.
+     * @return array Returns the rows from the database.
+     */
+    public function get_batch_filter($date_debut, $date_fin) {
+
+        $this->db->order_by('start_datetime', 'desc');
+        $this->db->where('ea_appointments.start_datetime <', $date_fin);
+        $this->db->where('ea_appointments.start_datetime >', $date_debut);
         return $this->db->get('ea_appointments')->result_array();
     }
 
@@ -578,10 +593,10 @@ class Appointments_Model extends CI_Model {
         $num_rows = $querry_rows->num_rows();
         return $num_rows;
     }
-    
+
     public function confirmer($appointment) {
         $this->db->where('id', $appointment['id']);
-		$appointment['etat']='confirmer';
+        $appointment['etat'] = 'confirmé';
         if (!$this->db->update('ea_appointments', $appointment)) {
             throw new Exception('Could not update waiting_appointment record.');
         }

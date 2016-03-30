@@ -446,6 +446,26 @@ class Waiting_Model extends CI_Model {
      *
      * @return string Returns the unique waiting_appointment hash.
      */
+    
+    /**
+     * Get all, or specific records from waiting_appointment's table.
+     *
+     * @example $this->Model->getBatch('id = ' . $recordId);
+     *
+     * @param string $where_clause (OPTIONAL) The WHERE clause of
+     * the query to be executed. DO NOT INCLUDE 'WHERE' KEYWORD.
+     * @return array Returns the rows from the database.
+     */
+    public function get_batch_filter($date_debut, $date_fin) {
+       
+		$this->db->order_by('start_datetime', 'desc');
+                $this->db->where('ea_waiting.start_datetime <', $date_fin);
+                $this->db->where('ea_waiting.start_datetime >', $date_debut);
+                return $this->db->get('ea_waiting')->result_array(); 
+    
+       
+    }
+    
     public function generate_hash() {
         $current_date = new DateTime();
         return md5($current_date->getTimestamp());

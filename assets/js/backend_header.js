@@ -38,10 +38,18 @@ var BackendHeader = {
         BackendHeader.helper = new HeaderHelper();
 
         BackendHeader.helper.getheadernotifications();
-
+		
+		
+		/**(function poll(){
+		$.ajax({ url: "server", success: function(data){
+        //Update your dashboard gauge
+        BackendHeader.helper.getheadernotifications();
+		}, dataType: "json", complete: poll, timeout: 3000 });
+		})();
+		**/
         $('#notification_results').css('height', '200px');
         $('#notification-row').css('height', '40px');
-        $('#notification_results').css('width', '370px');
+        $('#notification_results').css('width', '400px');
         $('#notification_results').css('margin-bottom', '20px');
         $('#notification_results').css('overflow-y', 'auto');
 
@@ -155,8 +163,10 @@ HeaderHelper.prototype.getFilterHtmlheadernotifications = function (notification
     var today = new Date();//.toString('yyyy-MM-dd hh:mm:ss');
     var action = new Date(notification_list.date_action);//.toString('yyyy-MM-dd hh:mm:ss');
     //var time = parseInt((today - action) / (1000 * 60 * 60 * 24));
-    console.log('today',today);
-    console.log('action',action);
+    today.getTimezoneOffset();
+    action.getTimezoneOffset();
+    //console.log(today);
+    //action.setUTCMilliseconds(1270544790922);
     var passed=0; 
     if (parseInt((today - action) / (1000)) >= 1 && parseInt((today - action) / (1000*60)) < 1)
     {   

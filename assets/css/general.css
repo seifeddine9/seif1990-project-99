@@ -61,7 +61,7 @@ body .ui-datepicker {
     border: 1px solid #54debc;
     border-radius: 2px;
     padding: 0;
-	
+    background-color: #fff;
 }
 
 body .ui-datepicker .ui-widget-header {
@@ -73,11 +73,18 @@ body .ui-datepicker th {
     background: #54debc;
     color: #FFF;
 }
+span.ui-slider-handle.ui-state-default.ui-corner-all {
+    background-color: #B5E0C4;
+    border-radius: 7px;
+}
 
 body .ui-datepicker tbody tr:first-child td {
     margin-top: 5px;
 }
-
+.ui-widget .ui-widget {
+    font-size: 1em;
+    background-color: #54debc;
+}
 body .ui-datepicker td a,
 body .ui-datepicker td span {
     border: none !important;

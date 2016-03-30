@@ -82,7 +82,7 @@ DashboardHelper.prototype.bindEventHandlers = function () {
 
 
     $(document).on('click', '#date_button', function (e) {
-        if ($('#date1').val() == '' || $('#date2').val() == '' || $('#date1').val() > $('#date2').val())
+        if ($('#date1').val() === '' || $('#date2').val() === '' || $('#date1').val() > $('#date2').val())
         {
             e.preventDefault();
         } else
@@ -93,7 +93,8 @@ DashboardHelper.prototype.bindEventHandlers = function () {
 
             };
             BackendDashboard.helper.filter(dates);
-
+            BackendDashboard.helper.getallwaiting(dates);
+            BackendDashboard.helper.getallappointment(dates);
         }
 
 
@@ -135,9 +136,9 @@ DashboardHelper.prototype.bindEventHandlers = function () {
 
     $(document).on('click', '#approuver-waiting', function () {
         var waiting_id = $(this).attr('approuver-id');
-        BackendDashboard.helper.deletewaitingbyid(waiting_id);
+        
         BackendDashboard.helper.getwaitingbyid(waiting_id);
-
+        
         //window.location.reload();
         //setTimeout(function(){location.reload(), 5000} );
 
@@ -226,7 +227,7 @@ DashboardHelper.prototype.getallwaiting = function (dates) {
     } else {
         var postData = {
             'csrfToken': GlobalVariables.csrfToken,
-            'dates': dates
+            'dates': JSON.stringify(dates)
         };
     }
 
@@ -280,7 +281,7 @@ DashboardHelper.prototype.getallwaiting = function (dates) {
  */
 DashboardHelper.prototype.getwaitingbyid = function (waiting_id) {
     //if (display == undefined) display = false;
-
+    
     var postUrl = GlobalVariables.baseUrl + '/index.php/backend_api/ajax_get_waiting_id';
 
 
@@ -298,7 +299,7 @@ DashboardHelper.prototype.getwaitingbyid = function (waiting_id) {
             return;
 
     }, 'json').fail(GeneralFunctions.ajaxFailureHandler);
-    //window.location.reload()
+    
 };
 
 
@@ -410,7 +411,7 @@ DashboardHelper.prototype.addwaitingappointment = function (waiting) {
     //if (display == undefined) display = false;
 
     var postUrl = GlobalVariables.baseUrl + '/index.php/backend_api/ajax_save_appointment';
-
+    
     var appointment = {
         'id_services': waiting['id_services'],
         'id_users_provider': waiting['id_users_provider'],
@@ -436,6 +437,7 @@ DashboardHelper.prototype.addwaitingappointment = function (waiting) {
 
         if (!GeneralFunctions.handleAjaxExceptions(response))
             return;
+        BackendDashboard.helper.deletewaitingbyid(waiting['id']);
 
     }, 'json').fail(GeneralFunctions.ajaxFailureHandler);
 
@@ -504,14 +506,22 @@ DashboardHelper.prototype.getFilterHtmlWaiting = function (waiting_list) {
  * @param {bool} display (OPTIONAL = false) If true then the selected record will
  * be displayed on the form.
  */
-DashboardHelper.prototype.getallappointment = function () {
+DashboardHelper.prototype.getallappointment = function (dates) {
     //if (display == undefined) display = false;
 
     var postUrl = GlobalVariables.baseUrl + '/index.php/backend_api/ajax_get_appointment';
-    var postData = {
-        'csrfToken': GlobalVariables.csrfToken
+    if (dates === '') {
+        var postData = {
+            'csrfToken': GlobalVariables.csrfToken
 
-    };
+        };
+
+    } else {
+        var postData = {
+            'csrfToken': GlobalVariables.csrfToken,
+            'dates': JSON.stringify(dates)
+        };
+    }
 
     $.post(postUrl, postData, function (response) {
         ///////////////////////////////////////////////////////

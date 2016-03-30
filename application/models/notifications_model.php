@@ -35,7 +35,7 @@ class Notifications_Model extends CI_Model {
      * @return int Returns the id of the new record.
      */
 	 public function insert($notifications) {
-        $notifications['date_action'] = date('Y-m-d H:i:s');
+        //$notifications['date_action'] = date('Y-m-d H:i:s');
         
 		
 		
