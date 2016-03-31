@@ -21,13 +21,13 @@ $(document).ready(function() {
         Backend.placeFooterToBottom();
     }).trigger('resize');
 
-    $(document).ajaxStart(function() {
-        $('#loading').show();
-    });
-
-    $(document).ajaxStop(function() {
-        $('#loading').hide();
-    });
+//    $(document).ajaxStart(function() {
+//        $('#loading').show();
+//    });
+//
+//    $(document).ajaxStop(function() {
+//        $('#loading').hide();
+//    });
 
     $('.menu-item').qtip({
         position: {

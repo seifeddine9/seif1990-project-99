@@ -63,6 +63,8 @@ var BackendCalendar = {
             'defaultView': 'agendaWeek',
             'height': BackendCalendar.getCalendarHeight(),
             //'theme':true,
+            //'disableDragging': true,
+            'disableResizing': true,
             'minTime': '08:00:00',
             'maxTime': '18:00:00',
             'editable': true,

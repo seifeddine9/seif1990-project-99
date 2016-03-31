@@ -172,7 +172,7 @@ class Notifications_Model extends CI_Model {
             $this->db->where($where_clause);
         }
 		$this->db->order_by('date_action', 'desc');
-        return $this->db->get('ea_notifications')->result_array();
+        return $this->db->get('ea_notifications',30)->result_array();
     }
 
     

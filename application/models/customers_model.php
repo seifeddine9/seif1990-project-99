@@ -1,4 +1,7 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed'); 
+<?php
+
+if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
 
 /* ----------------------------------------------------------------------------
  * Easy!Appointments - Open Source Web Scheduler
@@ -17,6 +20,7 @@
  * @package Models
  */
 class Customers_Model extends CI_Model {
+
     /**
      * Class Constructor
      */
@@ -42,34 +46,38 @@ class Customers_Model extends CI_Model {
         //:: CHECK IF CUSTOMER ALREADY EXIST (FROM EMAIL).
         if ($this->exists($customer) && !isset($customer['id'])) {
             // Find the customer id from the database.
-        $customer['id'] = $this->find_record_id($customer);
+
+            $customer['id'] = $this->find_record_id($customer);
         }
 
         // :: INSERT  CUSTOMER RECORD
-        if ( !isset($customer['id'])) {
+        if (!isset($customer['id'])) {
             $customer['id'] = $this->insert($customer);
-        } 
-        
+        } else {
+            $this->update($customer);
+        }
+
         return $customer['id'];
     }
 
-public function updatee($customer) {
-        
-       
-            $this->update($customer);
-        
-        
+    public function updatee($customer) {
+
+
+        $this->update($customer);
+
+
         return $customer['id'];
     }
 
     public function updatee_password($customer) {
-        
-       
-            $this->update_password($customer);
-        
-        
+
+
+        $this->update_password($customer);
+
+
         return $customer['id'];
     }
+
     /**
      * Check if a particular customer record already exists.
      *
@@ -88,13 +96,12 @@ public function updatee($customer) {
 
         // This method shouldn't depend on another method of this class.
         $num_rows = $this->db
-                ->select('*')
-                ->from('ea_users')
-                ->join('ea_roles', 'ea_roles.id = ea_users.id_roles', 'inner')
-                ->where('ea_users.email')
-
-                ->where('ea_roles.slug', DB_SLUG_CUSTOMER)
-                ->get()->num_rows();
+                        ->select('*')
+                        ->from('ea_users')
+                        ->join('ea_roles', 'ea_roles.id = ea_users.id_roles', 'inner')
+                        ->where('ea_users.email')
+                        ->where('ea_roles.slug', DB_SLUG_CUSTOMER)
+                        ->get()->num_rows();
 
         return ($num_rows > 0) ? TRUE : FALSE;
     }
@@ -109,24 +116,24 @@ public function updatee($customer) {
     private function insert($customer) {
         // Before inserting the customer we need to get the customer's role id
         // from the database and assign it to the new record as a foreign key.
-                $this->load->helper('general');
+        $this->load->helper('general');
 
         $customer_role_id = $this->db
-                ->select('id')
-                ->from('ea_roles')
-                ->where('slug', DB_SLUG_CUSTOMER)
-                ->get()->row()->id;
-          
+                        ->select('id')
+                        ->from('ea_roles')
+                        ->where('slug', DB_SLUG_CUSTOMER)
+                        ->get()->row()->id;
+
         $customer['id_roles'] = $customer_role_id;
         $customer['salt'] = generate_salt();
-       $customer['password'] = hash_password($customer['salt'], $customer['password']);
-      
+        $customer['password'] = hash_password($customer['salt'], $customer['password']);
+
 
         if (!$this->db->insert('ea_users', $customer)) {
             throw new Exception('Could not insert customer to the database.');
         }
 
-        
+
 
 
         return intval($this->db->insert_id());
@@ -144,11 +151,11 @@ public function updatee($customer) {
      */
     private function update($customer) {
         // Do not update empty string values.
-     /* foreach ($customer as $key => $value) {
-            if ($value === '')
-                unset($customer[$key]);
-        }*/
-      $customer_id = (isset($customer['id'])) ? $customer['id'] : '';
+        /* foreach ($customer as $key => $value) {
+          if ($value === '')
+          unset($customer[$key]);
+          } */
+        $customer_id = (isset($customer['id'])) ? $customer['id'] : '';
 
         $num_rows = $this->db
                 ->select('*')
@@ -159,19 +166,21 @@ public function updatee($customer) {
                 ->num_rows();
 
         if ($num_rows > 0) {
-            throw new Exception('Un compte a déjà été créé avec  cette adresse  '.$customer['email'] .'.');
+            throw new Exception('Un compte a déjà été créé avec  cette adresse  ' . $customer['email'] . '.');
         }
 
-       // Validate email address
-         if (!filter_var($customer['email'], FILTER_VALIDATE_EMAIL)) {
+        // Validate email address
+        if (!filter_var($customer['email'], FILTER_VALIDATE_EMAIL)) {
             throw new Exception('Adresse email non valide : '
-                    . $customer['email']);
+            . $customer['email']);
         }
 
 
-     
+        $this->load->helper('general');
+        $customer['salt'] = generate_salt();
+        $customer['password'] = hash_password($customer['salt'], $customer['password']);
 
-       //$customer['password'] = hash_password($customer['salt'], $customer['password']);
+        //$customer['password'] = hash_password($customer['salt'], $customer['password']);
 
 
         $this->db->where('id', $customer['id']);
@@ -183,7 +192,8 @@ public function updatee($customer) {
 
         return intval($customer['id']);
     }
-        /**
+
+    /**
      * Update an existing customer record in the database.
      *
      * The customer data argument should already include the record
@@ -195,12 +205,12 @@ public function updatee($customer) {
      */
     private function update_password($customer) {
         // Do not update empty string values.
-      foreach ($customer as $key => $value) {
+        foreach ($customer as $key => $value) {
             if ($value === '')
                 unset($customer[$key]);
         }
         $customer_id = (isset($customer['id'])) ? $customer['id'] : '';
-       $customer['password'] = hash_password($customer['salt'], $customer['password']);
+        $customer['password'] = hash_password($customer['salt'], $customer['password']);
 
 
         $this->db->where('id', $customer['id']);
@@ -229,7 +239,7 @@ public function updatee($customer) {
     public function find_record_id($customer) {
         if (!isset($customer['email'])) {
             throw new Exception('Customer\'s email was not provided : '
-                    . print_r($customer, TRUE));
+            . print_r($customer, TRUE));
         }
 
         // Get customer's role id
@@ -260,40 +270,38 @@ public function updatee($customer) {
         // If a customer id is provided, check whether the record
         // exist in the database.
         if (isset($customer['id'])) {
-            $num_rows = $this->db->get_where('ea_users',
-                    array('id' => $customer['id']))->num_rows();
+            $num_rows = $this->db->get_where('ea_users', array('id' => $customer['id']))->num_rows();
             if ($num_rows == 0) {
                 throw new Exception('Provided customer id does not '
-                        . 'exist in the database.');
+                . 'exist in the database.');
             }
         }
         // Validate required fields
-        if (!isset($customer['last_name'])
-                || !isset($customer['email'])
-            ) {
+        if (!isset($customer['last_name']) || !isset($customer['email'])
+        ) {
             throw new Exception('veuillez remplir tout les champs : '
-                    . print_r($customer, TRUE));
+            . print_r($customer, TRUE));
         }
 
         // Validate email address
         if (!filter_var($customer['email'], FILTER_VALIDATE_EMAIL)) {
             throw new Exception('Adresse email non valide : '
-                    . $customer['email']);
+            . $customer['email']);
         }
 
-          // Check if username exists.
-        /*if (isset($customer['username'])) {
-            $user_id = (isset($customer['id'])) ? $customer['id'] : '';
-            if (!$this->validate_username($customer['username'], $user_id)) {
-                throw new Exception ('Nom d’utilisateur existe déjà. veuillez choisir un autre .');
-            }
-        }*/
+        // Check if username exists.
+        /* if (isset($customer['username'])) {
+          $user_id = (isset($customer['id'])) ? $customer['id'] : '';
+          if (!$this->validate_username($customer['username'], $user_id)) {
+          throw new Exception ('Nom d’utilisateur existe déjà. veuillez choisir un autre .');
+          }
+          } */
 
- // Validate admin password
+        // Validate admin password
         if (isset($customer['password'])) {
             if (strlen($customer['password']) < MIN_PASSWORD_LENGTH) {
-                throw new Exception('le mot de passe doit contenir au moins ' 
-                        . MIN_PASSWORD_LENGTH . ' caractère  .');
+                throw new Exception('le mot de passe doit contenir au moins '
+                . MIN_PASSWORD_LENGTH . ' caractère  .');
             }
         }
 
@@ -309,7 +317,7 @@ public function updatee($customer) {
                 ->num_rows();
 
         if ($num_rows > 0) {
-            throw new Exception('Un compte a déjà été créé avec  cette adresse  '.$customer['email'] .'.');
+            throw new Exception('Un compte a déjà été créé avec  cette adresse  ' . $customer['email'] . '.');
         }
 
         return TRUE;
@@ -346,9 +354,8 @@ public function updatee($customer) {
         if (!is_numeric($customer_id)) {
             throw new Exception('Invalid argument provided as $customer_id : ' . $customer_id);
         }
-        $user =  $this->db->get_where('ea_users', array('id' => $customer_id))->row_array();
-                return $user;
-
+        $user = $this->db->get_where('ea_users', array('id' => $customer_id))->row_array();
+        return $user;
     }
 
     /**
@@ -362,24 +369,24 @@ public function updatee($customer) {
     public function get_value($field_name, $customer_id) {
         if (!is_numeric($customer_id)) {
             throw new Exception('Invalid argument provided as $customer_id : '
-                    . $customer_id);
+            . $customer_id);
         }
 
         if (!is_string($field_name)) {
             throw new Exception('$field_name argument is not a string : '
-                    . $field_name);
+            . $field_name);
         }
 
         if ($this->db->get_where('ea_users', array('id' => $customer_id))->num_rows() == 0) {
             throw new Exception('The record with the $customer_id argument '
-                    . 'does not exist in the database : ' . $customer_id);
+            . 'does not exist in the database : ' . $customer_id);
         }
 
         $row_data = $this->db->get_where('ea_users', array('id' => $customer_id)
                 )->row_array();
         if (!isset($row_data[$field_name])) {
             throw new Exception('The given $field_name argument does not'
-                    . 'exist in the database : ' . $field_name);
+            . 'exist in the database : ' . $field_name);
         }
 
         $customer = $this->db->get_where('ea_users', array('id' => $customer_id))->row_array();
@@ -417,9 +424,7 @@ public function updatee($customer) {
         return $this->db->get_where('ea_roles', array('slug' => DB_SLUG_CUSTOMER))->row()->id;
     }
 
-
-  
-  /**
+    /**
      * Validate Records Username 
      * 
      * @param string $username The provider records username.
@@ -427,12 +432,9 @@ public function updatee($customer) {
      * @return bool Returns the validation result.
      */
     public function validate_username($username, $user_id) {
-        $num_rows = $this->db->get_where('ea_users', 
-                array('username' => $username, 'id <> ' => $user_id))->num_rows();
+        $num_rows = $this->db->get_where('ea_users', array('username' => $username, 'id <> ' => $user_id))->num_rows();
         return ($num_rows > 0) ? FALSE : TRUE;
     }
- 
-
 
     /**
      * Find the database id of a customer record.
@@ -450,7 +452,7 @@ public function updatee($customer) {
     public function find_customer_id($idfacebook) {
         if (!isset($idfacebook)) {
             throw new Exception('Customer\'s idfacebook was not provided : '
-                    . print_r($idfacebook, TRUE));
+            . print_r($idfacebook, TRUE));
         }
 
         // Get customer's role id

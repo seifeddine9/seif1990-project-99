@@ -162,7 +162,11 @@ class Backend_api extends CI_Controller {
                     if (!isset($appointment['id_users_customer'])) {
                         $appointment['id_users_customer'] = $customer['id'];
                     }
-                    $appointment['etat'] = 'confirmé';
+                    if($this->settings_model->get_setting('confirm_appointment') ==='1'){
+                      $appointment['etat'] = 'confirmé';
+                    }else{
+                      $appointment['etat'] = 'en attente';  
+                    }
                     $appointment['id'] = $this->appointments_model->add($appointment);
                 }
 
@@ -430,7 +434,7 @@ class Backend_api extends CI_Controller {
             ));
         }
     }
-
+    
     /**
      * [AJAX] Delete appointment from the database.
      *
@@ -1860,6 +1864,67 @@ class Backend_api extends CI_Controller {
 
         //$client->account->messages->sendMessage('+12013836183',$number,$msg);
     }
+    
+    /*
+**
+**
+**
+*/
+
+  public function send_file() {
+    try{
+      
+      $this->load->model('customers_model');
+        $this->load->model('settings_model');
+        $this->load->model('user_model');
+        $this->load->helper('general');
+
+      $file = $_FILES['file'];
+
+      $config['upload_path'] = './uploads/';
+      if ( is_file( $config['upload_path'] ) ) { chmod( $config['upload_path'], 777 ); }
+
+      $config['allowed_types'] = 'jpg|png';
+      $this->load->library( 'upload', $config );
+
+
+
+
+
+      if ( !$this->upload->do_upload( 'file' ) ) {
+        $error = array( 'error' => $this->upload->display_errors() );
+      }
+      else {
+        $data = array( 'upload_data' => $this->upload->data() );
+        $full_path = $data['upload_data']['full_path'];
+        
+
+            $customer = $this->customers_model->get_row($_POST['customerId']);
+
+            $customer['src_photo'] =$config['upload_path'] . $data['upload_data']['file_name'];
+            $customer['id'] = $this->customers_model->updatee($customer);
+
+      }
+
+      
+
+
+
+      echo json_encode( $full_path );
+
+    }catch ( Exception $exc ) {
+      echo json_encode( array(
+          'exceptions' => exceptionToJavaScript( $exc )
+        ) );
+
+    }
+
+
+
+
+
+  }
+
 
 }
 

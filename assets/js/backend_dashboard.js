@@ -41,6 +41,17 @@ var BackendDashboard = {
 
         BackendDashboard.helper.getallnotifications();  
         
+        setInterval(function () {
+            $(document).ajaxStart(function () {
+                $('#loading').hide();
+            });
+           BackendDashboard.helper.getallnotifications();  
+            //console.log('hello');
+
+            
+
+        }, 10000);
+        
         /**
         setInterval(function () {
             BackendDashboard.helper.getallnotifications();   
@@ -139,7 +150,7 @@ DashboardHelper.prototype.bindEventHandlers = function () {
         
         BackendDashboard.helper.getwaitingbyid(waiting_id);
         
-        //window.location.reload();
+        window.location.reload();
         //setTimeout(function(){location.reload(), 5000} );
 
 
@@ -151,7 +162,7 @@ DashboardHelper.prototype.bindEventHandlers = function () {
         BackendDashboard.helper.addbloquedwaiting(waiting_id);
 
 
-        window.location.reload();
+        //window.location.reload();
 
 
 
@@ -438,9 +449,9 @@ DashboardHelper.prototype.addwaitingappointment = function (waiting) {
         if (!GeneralFunctions.handleAjaxExceptions(response))
             return;
         BackendDashboard.helper.deletewaitingbyid(waiting['id']);
-
+        
     }, 'json').fail(GeneralFunctions.ajaxFailureHandler);
-
+    window.location.reload();
 };
 
 

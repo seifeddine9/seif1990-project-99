@@ -38,15 +38,38 @@ var BackendHeader = {
         BackendHeader.helper = new HeaderHelper();
 
         BackendHeader.helper.getheadernotifications();
-		
-		
-		/**(function poll(){
-		$.ajax({ url: "server", success: function(data){
-        //Update your dashboard gauge
-        BackendHeader.helper.getheadernotifications();
-		}, dataType: "json", complete: poll, timeout: 3000 });
-		})();
-		**/
+
+
+//        setInterval(function () {
+//            $.ajax({url: "server", success: function (data) {
+//                    //Update your dashboard gauge
+//                    BackendHeader.helper.getheadernotifications();
+//                }, dataType: "json"});
+//        }, 3000);
+
+
+
+
+        setInterval(function () {
+            $(document).ajaxStart(function () {
+                $('#loading').hide();
+            });
+            BackendHeader.helper.getheadernotifications();
+            //console.log('hello');
+
+            
+
+        }, 10000);
+
+
+
+        /**(function poll(){
+         $.ajax({ url: "server", success: function(data){
+         //Update your dashboard gauge
+         BackendHeader.helper.getheadernotifications();
+         }, dataType: "json", complete: poll, timeout: 3000 });
+         })();
+         **/
         $('#notification_results').css('height', '200px');
         $('#notification-row').css('height', '40px');
         $('#notification_results').css('width', '400px');
@@ -65,7 +88,6 @@ var BackendHeader = {
         HeaderHelper.prototype.bindEventHandlers();
     }
 };
-
 /**
  * This class contains the methods that are used in the backend customers page.
  *
@@ -74,7 +96,6 @@ var BackendHeader = {
 var HeaderHelper = function () {
     this.filterResults = {};
 };
-
 /**
  * Binds the default event handlers of the backend customers page.
  */
@@ -117,7 +138,7 @@ HeaderHelper.prototype.getheadernotifications = function () {
 
     $.post(postUrl, postData, function (response) {
         ///////////////////////////////////////////////////////
-        console.log('Filter notification_list Response:', response);
+        //console.log('Filter notification_list Response:', response);
         ///////////////////////////////////////////////////////
 
         if (!GeneralFunctions.handleAjaxExceptions(response))
@@ -129,7 +150,7 @@ HeaderHelper.prototype.getheadernotifications = function () {
         var curr = new Date; // get current date
         var first = curr.getDate() - curr.getDay(); // First day is the day of the month - the day of the week
         var firstday = new Date(curr.setDate(first)).toString('yyyy-MM-dd 00:00:00');
-        console.log('firstday: ', firstday);
+        //console.log('firstday: ', firstday);
 
 
 
@@ -167,28 +188,25 @@ HeaderHelper.prototype.getFilterHtmlheadernotifications = function (notification
     action.getTimezoneOffset();
     //console.log(today);
     //action.setUTCMilliseconds(1270544790922);
-    var passed=0; 
-    if (parseInt((today - action) / (1000)) >= 1 && parseInt((today - action) / (1000*60)) < 1)
-    {   
+    var passed = 0;
+    if (parseInt((today - action) / (1000)) >= 1 && parseInt((today - action) / (1000 * 60)) < 1)
+    {
         var time = parseInt((today - action) / (1000));
-        passed="il y a "+time+" secondes";
-    }
-    else if (parseInt((today - action) / (1000 * 60))>= 1 && parseInt((today - action) / (1000 * 60 * 60))< 1)
-    {   
+        passed = "il y a " + time + " secondes";
+    } else if (parseInt((today - action) / (1000 * 60)) >= 1 && parseInt((today - action) / (1000 * 60 * 60)) < 1)
+    {
         var time = parseInt((today - action) / (1000 * 60));
-        passed="il y a "+time+" minutes";
-    }
-    else if (parseInt((today - action) / (1000 * 60 * 60))>= 1 && parseInt((today - action) / (1000 * 60 * 60 * 24))< 1)
-    {   
+        passed = "il y a " + time + " minutes";
+    } else if (parseInt((today - action) / (1000 * 60 * 60)) >= 1 && parseInt((today - action) / (1000 * 60 * 60 * 24)) < 1)
+    {
         var time = parseInt((today - action) / (1000 * 60 * 60));
-        passed="il y a "+time+" heures";
-    }
-    else if (parseInt((today - action) / (1000 * 60 * 60 * 24))>= 1)
-    {   
+        passed = "il y a " + time + " heures";
+    } else if (parseInt((today - action) / (1000 * 60 * 60 * 24)) >= 1)
+    {
         var time = parseInt((today - action) / (1000 * 60 * 60 * 24));
-        passed= "il y a "+time+" jours";
+        passed = "il y a " + time + " jours";
     }
-    
+
 
 
     //console.log('today', today);

@@ -1236,8 +1236,13 @@ class home extends CI_Controller {
                 }
 
                 if ($send_provider == TRUE) {
-
-                    $this->notifications->send_appointment_details($appointment, $provider, $service, $customer, $company_settings, $provider_title, $provider_message, $provider_link, $provider['email']);
+                    if ($appointment['etat'] === 'en attente') {
+                        $provider_title = $this->lang->line('appointment_sent_to_you');
+                        $provider_message = $this->lang->line('appointment_waiting');
+                        $this->notifications->send_waiting_details($appointment, $provider, $service, $customer, $company_settings, $provider_title, $provider_message, $provider_link, $provider['email']);
+                    } else {
+                        $this->notifications->send_appointment_details($appointment, $provider, $service, $customer, $company_settings, $provider_title, $provider_message, $provider_link, $provider['email']);
+                    }
                 }
             } catch (Exception $exc) {
                 log_message('error', $exc->getMessage());

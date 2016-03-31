@@ -191,7 +191,7 @@
                                 <?php $hidden = ($privileges[PRIV_DASHBOARD]['view'] == TRUE) ? '' : 'hidden'; ?>
                                 <?php $active = ($active_menu == PRIV_DASHBOARD) ? 'active' : ''; ?>
                                 <a href="<?php echo $base_url; ?>/index.php/backend/dashboard" class="menu-item <?php echo $hidden; ?><?php echo $active; ?>"
-                                   title="<?php echo $this->lang->line('manage_users_hint'); ?>">
+                                   title="<?php echo $this->lang->line('manage_dashboard_hint'); ?>">
                                        <?php echo $this->lang->line('dashboard'); ?>
                                 </a>
                             </li>
