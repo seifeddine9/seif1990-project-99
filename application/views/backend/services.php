@@ -21,6 +21,55 @@
     });
 </script>
 
+<style>
+
+    .btn-file {
+        position: absolute;
+        overflow: hidden;
+        top: 70%;
+        left: 0;
+        bottom: 0;
+
+    }
+    .btn-file input[type=file] {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+
+        font-size: 100px;
+        filter: alpha(opacity=0);
+        opacity: 0;
+        outline: none;
+        cursor: inherit;
+        display: block;
+    }
+
+    .display-pic
+    {display:inline-block;
+     position:relative;
+    }
+
+    .photo-profile
+    {
+        max-width: 150px;
+        max-height: 150px;
+        min-width: 150px;
+        min-height: 150px;
+    }
+    .camera{
+        background-color: transparent;
+        border-radius: 28%;
+        border: none;
+    }
+
+    .camera:hover{
+        background-color: transparent !important;
+        border-radius: 28%;
+        border: none;
+    }
+</style>
+
 <div id="services-page" class="container-fluid">
     <ul class="nav nav-tabs">
         <li role="presentation" class="services-tab tab active"><a><?php echo $this->lang->line('services'); ?></a></li>
@@ -87,7 +136,15 @@
                 <div class="form-message alert" style="display:none;"></div>
 
                 <input type="hidden" id="service-id" />
+                <div class="display-pic">
+                        <img src="" class=" photo-profile img-thumbnail img-responsive" alt="photo profile"  id="image"/>
+                        <span class="btn btn-default btn-file camera">
+                            <span class="fa fa-camera" style="font-size: 2.5em; color: #fff;" ></span>
+                            
 
+                            <input type="file" class="form-control required" id="File" alt="photo profile" />
+                        </span>
+                </div>
                 <div class="form-group">
                     <label for="service-name"><?php echo $this->lang->line('name'); ?> *</label>
                     <input type="text" id="service-name" class="form-control required" />

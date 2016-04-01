@@ -1924,6 +1924,60 @@ class Backend_api extends CI_Controller {
 
 
   }
+  
+   public function send_file_service() {
+    try{
+      
+      $this->load->model('services_model');
+        $this->load->model('settings_model');
+        $this->load->model('user_model');
+        $this->load->helper('general');
+
+      $file = $_FILES['file'];
+
+      $config['upload_path'] = './assets/img/Services/';
+      if ( is_file( $config['upload_path'] ) ) { chmod( $config['upload_path'], 777 ); }
+
+      $config['allowed_types'] = 'jpg|png';
+      $this->load->library( 'upload', $config );
+
+
+
+
+
+      if ( !$this->upload->do_upload( 'file' ) ) {
+        $error = array( 'error' => $this->upload->display_errors() );
+      }
+      else {
+        $data = array( 'upload_data' => $this->upload->data() );
+        $full_path = $data['upload_data']['full_path'];
+        
+
+            $service = $this->services_model->get_row($_POST['serviceId']);
+
+            $service['src_photo'] =$config['upload_path'] . $data['upload_data']['file_name'];
+            $this->services_model->update($service);
+
+      }
+
+      
+
+
+
+      echo json_encode( $full_path );
+
+    }catch ( Exception $exc ) {
+      echo json_encode( array(
+          'exceptions' => exceptionToJavaScript( $exc )
+        ) );
+
+    }
+
+
+
+
+
+  }
 
 
 }

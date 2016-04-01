@@ -47,7 +47,8 @@ var BackendServices = {
         BackendServices.helper = new ServicesHelper();
         BackendServices.helper.resetForm();
         BackendServices.helper.filter('');
-
+        $('#image').attr('src', GlobalVariables.baseUrl + 'assets/img/Services/product-default.png');
+        document.getElementById("File").disabled = true;
         $('#filter-services .results').jScrollPane();
         $('#filter-categories .results').jScrollPane();
 
@@ -82,6 +83,8 @@ var BackendServices = {
             $('.filter-key').val('');
             Backend.placeFooterToBottom();
         });
+        
+        
 
         ServicesHelper.prototype.bindEventHandlers();
         CategoriesHelper.prototype.bindEventHandlers();
@@ -157,8 +160,10 @@ ServicesHelper.prototype.bindEventHandlers = function() {
             $('#filter-services .results').css('color', '#AAA');
             return; // exit because we are on edit mode
         }
-
+        document.getElementById("File").disabled = false;
         var serviceId = $(this).attr('data-id');
+        $('#File').attr('data-id', serviceId);
+        
         var service = {};
         $.each(BackendServices.helper.filterResults, function(index, item) {
             if (item.id === serviceId) {
@@ -171,6 +176,7 @@ ServicesHelper.prototype.bindEventHandlers = function() {
         $('#filter-services .selected-row').removeClass('selected-row');
         $(this).addClass('selected-row');
         $('#edit-service, #delete-service').prop('disabled', false);
+        console.log('service :', service.src_photo);
     });
 
     /**
@@ -260,6 +266,52 @@ ServicesHelper.prototype.bindEventHandlers = function() {
 
         GeneralFunctions.displayMessageBox(EALang['delete_service'],
                 EALang['delete_record_prompt'], messageBtns);
+    });
+    $('#File').change(function (event) {
+        var val = $('#File').val();
+        
+        console.log("val" + val);
+        var serviceId = $(this).attr('data-id');
+        console.log('serviceId', serviceId);
+        if (val == '') {
+            event.preventDefault();
+            $('#File').addClass('error');
+        } else
+        {   
+            
+            var file_data = $('#File').prop('files')[0];
+            var form_data = new FormData();
+            form_data.append('file', file_data);
+            form_data.append('csrfToken', GlobalVariables.csrfToken);
+            form_data.append('serviceId', serviceId);
+            console.log('form_data',form_data);
+            //$('.upload-file').hide();
+            //$("#progress").removeClass('hidden');
+
+            var postUrl = GlobalVariables.baseUrl + 'index.php/backend_api/send_file_service';
+
+
+
+
+            $.ajax({
+                url: postUrl, // point to server-side PHP script 
+                dataType: 'json', // what to expect back from the PHP script, if anything
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: form_data,
+                type: 'post',
+                success: function (response) {
+                    //alert('success');
+                    window.location.reload();
+                    console.log('response: ',response);
+                    GlobalVariables.full_path = response;
+                }
+
+
+            });
+        }
+
     });
 };
 
@@ -352,6 +404,8 @@ ServicesHelper.prototype.validate = function(service) {
  * Resets the service tab form back to its initial state.
  */
 ServicesHelper.prototype.resetForm = function() {
+    $('#image').attr('src', GlobalVariables.baseUrl + 'assets/img/Services/product-default.png');
+    document.getElementById("File").disabled = true;
     $('#services .details').find('input, textarea').val('');
     $('#service-category').val('null');
     $('#services .add-edit-delete-group').show();
@@ -378,7 +432,7 @@ ServicesHelper.prototype.display = function(service) {
     $('#service-price').val(service.price);
     $('#service-currency').val(service.currency);
     $('#service-description').val(service.description);
-
+    $('#image').attr('src', GlobalVariables.baseUrl + service.src_photo);
     var categoryId = (service.id_service_categories != null) ? service.id_service_categories : 'null';
     $('#service-category').val(categoryId);
 };
@@ -748,6 +802,7 @@ CategoriesHelper.prototype.validate = function(category) {
  * Bring the category form back to its initial state.
  */
 CategoriesHelper.prototype.resetForm = function() {
+    $('#image').attr('src', GlobalVariables.baseUrl + 'assets/img/default_image.jpg');
     $('#categories .add-edit-delete-group').show();
     $('#categories .save-cancel-group').hide();
     $('#categories .details').find('input, textarea').val('');

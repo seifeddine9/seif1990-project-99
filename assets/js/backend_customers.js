@@ -116,7 +116,8 @@ CustomersHelper.prototype.bindEventHandlers = function () {
                 data: form_data,
                 type: 'post',
                 success: function (response) {
-                    alert('success');
+                    //alert('success');
+                    window.location.reload();
                     console.log(response);
                     GlobalVariables.full_path = response;
                 }
